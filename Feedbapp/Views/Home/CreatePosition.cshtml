@@ -1,0 +1,47 @@
+﻿@model Dominio.Position
+
+@{
+    ViewData["Title"] = "CreatePosition";
+}
+
+<h1>Crear Posicion</h1>
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="CreatePosition">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>    
+            <label for="exampleSelect">Developers</label>
+            <select asp-for="Developer.Id"  class="form-control" id="exampleSelect">
+                @foreach (Dominio.Developer d in ViewBag.developers)
+                {
+                    <option value="@d.Id">@d.Name @d.LastName</option>
+                }
+            </select>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label">Description</label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Recurrence">Recurencia</label>
+                <select asp-for="Recurrence" class="form-control" id="exampleSelect">
+                    @foreach (Dominio.Recurrence recurrenceOption in Enum.GetValues(typeof(Dominio.Recurrence)))
+                    {
+                        <option value="@recurrenceOption">@recurrenceOption</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+                <a asp-action="Positions">Volver</a>
+            </div>
+        </form>
+        <p>@ViewBag.mensaje</p>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

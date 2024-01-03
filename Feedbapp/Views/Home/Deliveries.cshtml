@@ -1,0 +1,35 @@
+﻿@model IEnumerable<Dominio.Deliveries>
+
+<h1>Envíos</h1>
+@if (Model.Count() == 0)
+{
+    <p>No existen Envíos</p>
+}
+else
+{
+    <div>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Developer</th>
+                    <th>Lider</th>
+                    <th>Fecha</th>
+                    <th>Ultimo</th>
+                    <th></th>
+                </tr>
+            </thead>
+            @foreach (Dominio.Deliveries d in Model)
+            {
+                <tbody>
+                    <tr>
+                        <td>@d.Position.Developer.Name @d.Position.Developer.LastName </td>
+                        <td>@d.Position.Developer.Leader.Name @d.Position.Developer.Leader.LastName </td>
+                        <td>@d.Date</td>
+                        <td></td>                       
+                    </tr>
+                </tbody>
+            }
+        </table>
+    </div>
+}
+<a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="CreateDeliveries">Crear envío</a>

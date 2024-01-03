@@ -1,0 +1,37 @@
+﻿@model IEnumerable<Dominio.Client>
+    
+<h1>Clientes</h1>
+@if (Model.Count() == 0)
+{
+    <p>No existen clientes</p>
+}
+else
+{  
+    <div>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Activo</th>
+                    <th></th>
+                </tr>
+            </thead>
+            @foreach (Dominio.Client c in Model)
+            {
+                <tbody>
+                    <tr>
+                        <td>@c.Name</td>
+                        <td>@c.Active</td>
+                        <td>
+                            @Html.ActionLink("Editar", "EditClient", "Home", new { id = c.Id })
+                            @Html.ActionLink("Delete", "DeleteClient", "Home", new { id = c.Id })
+                        </td>
+                    </tr>
+
+                </tbody>
+            }
+        </table>       
+    </div>    
+}
+<a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="CreateClient">Crear cliente</a>
+<p>@ViewBag.Mensaje</p>
