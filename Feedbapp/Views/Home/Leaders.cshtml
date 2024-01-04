@@ -28,6 +28,7 @@ else
                          <td>@l.Active</td>
                         <td>
                             @Html.ActionLink("Editar", "EditLeader", "Home", new { id = l.Id })
+                            @Html.ActionLink("Borrar", "DeleteLeader", "Home", new { id = l.Id })
                         </td>
                     </tr>
                 </tbody>

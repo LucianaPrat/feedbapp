@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.VisualBasic.FileIO;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,9 +14,9 @@ namespace Dominio
         public Recurrence Recurrence {  get; set; }
         public string Description { get; set; }
         public Developer Developer { get; set; }    
+        public bool Removed {  get; set; }  
 
         public Position() {
-            Id = UltimoId++;
         }
 
         public Position(Recurrence recurrence, string description,Developer developer) {
@@ -23,6 +24,14 @@ namespace Dominio
             Recurrence = recurrence;
             Description = description;
             Developer = developer;
+            Removed = false;
+        }
+        public void Delete()
+        {
+            if (!Removed)
+            {
+                Removed = true;
+            }
         }
     }
 }

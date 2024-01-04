@@ -14,10 +14,9 @@ namespace Dominio
         public string LastName { get; set; }
         public string Email { get; set; }
         public bool Active { get; set; }
-
+        public bool Removed { get; set; }
         public Person()
         {
-            Id = UltimoId++;
         }
 
         public Person(string name,string lastName, string email)
@@ -27,6 +26,15 @@ namespace Dominio
             LastName = lastName;
             Email = email;
             Active = true;
+            Removed = false;
+        }
+
+        public void Delete()
+        {
+            if(!Removed)
+            {
+                Removed = true;
+            }            
         }
     }
 }

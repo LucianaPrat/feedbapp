@@ -32,7 +32,15 @@ namespace Dominio
         #region Gets
         public List<Client> GetClients()
         {
-            return _clients;
+            List < Client > c = new List < Client >();
+            foreach ( Client client in _clients )
+            {
+                if(client.Removed == false)
+                {
+                    c.Add( client );
+                }
+            }
+            return c;
         }
         public List<Developer> GetDevelopers()
         {
@@ -52,7 +60,7 @@ namespace Dominio
             List<Leader> leaders = new List<Leader>();
             foreach (var p in _persons)
             {
-                if (p is Leader)
+                if (p is Leader && p.Removed == false)
                 {
                     Leader d = (Leader)p;
                     leaders.Add(d);
@@ -62,7 +70,15 @@ namespace Dominio
         }
         public List<Position> GetPositions()
         {
-            return _positions;
+            List<Position> pos = new List<Position>();
+            foreach (var p in _positions)
+            {
+                if (p.Removed == false)
+                {
+                    pos.Add(p);
+                }
+            }
+            return pos;
         }
         public List<Deliveries> GetDeliveries()
         {
@@ -151,7 +167,7 @@ namespace Dominio
         {
             if (!_positions.Contains(p))
             {
-                Developer? d = SerchDeveloper(p.Developer.Id);
+                Developer? d = SerchDeveloperId(p.Developer.Id);
                 p.Developer = d;
                 _positions.Add(p);
             }
@@ -187,7 +203,18 @@ namespace Dominio
             }
             return null;
         }
-        public Developer? SerchDeveloper(int id)
+        public Leader? SerchLeaderId(int id)
+        {
+            foreach (Leader l in GetLeaders())
+            {
+                if (l.Id == id)
+                {
+                    return l;
+                }
+            }
+            return null;
+        }
+        public Developer? SerchDeveloperId(int id)
         {
             foreach (var d in _persons)
             {
@@ -231,19 +258,7 @@ namespace Dominio
             }
             return null;
         }
-        public Leader? SerchLeader(int id)
-        {
-            foreach (Leader l in GetLeaders())
-            {
-                if (l.Id == id)
-                {
-                    return l;
-                }
-            }
-            return null;
-        }
-
-        public Position? SerchPosition(int id)
+        public Position? SerchPositionId(int id)
         {
             foreach (Position p in _positions)
             {
@@ -254,6 +269,7 @@ namespace Dominio
             }
             return null;
         }
+
         #endregion
 
         #region Edits
@@ -323,7 +339,36 @@ namespace Dominio
             }
         }
 
-        
+        public void DeleteLeader(Leader? li)
+        {
+            foreach (var l in _persons)
+            {
+                if (l == li)
+                {
+                    l.Delete();
+                }
+            }
+        }
+        public void DeleteDeveloper(Developer? dev)
+        {
+            foreach (var d in _persons)
+            {
+                if (d == dev)
+                {
+                   d.Delete();
+                }
+            }
+        }
+        public void DeletePosition(Position? p)
+        {
+            foreach (var po in _positions)
+            {
+                if (po == p)
+                {
+                    po.Delete();
+                }
+            }
+        }
         #endregion
     }
 }

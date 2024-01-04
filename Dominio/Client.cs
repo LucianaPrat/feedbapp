@@ -18,7 +18,6 @@ namespace Dominio
         #region Builders
         public Client()
         {
-            Id = UltimoId++;
         }
         public Client(string name)
         {
@@ -30,7 +29,7 @@ namespace Dominio
         #endregion
 
         #region Methods
-        public void Deactivate()
+        public void Desactivate()
         {
             if (Active)
             {

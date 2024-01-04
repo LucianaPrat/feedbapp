@@ -30,7 +30,8 @@ else
                         <td>@p.Recurrence</td>
                         <td>
                             @Html.ActionLink("Edit", "EditPosition", new { id = p.Id }) |
-                            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                            @Html.ActionLink("Enviar email", "SendEmail", new { id = p.Id }) |
+                            @Html.ActionLink("Borrar", "DeletePosition", "Home", new { id = p.Id })
                         </td>
                     </tr>
                 </tbody>

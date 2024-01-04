@@ -14,7 +14,6 @@ namespace Feedbapp.Controllers
         {
             _logger = logger;
         }
-
         public IActionResult Index()
         {
             return View();
@@ -134,7 +133,7 @@ namespace Feedbapp.Controllers
         public IActionResult EditDeveloper(int id)
         {
             ViewBag.leaders = s.GetLeaders();
-            Developer? serch = s.SerchDeveloper(id);
+            Developer? serch = s.SerchDeveloperId(id);
             return View(serch);
         }
         [HttpPost]
@@ -148,7 +147,7 @@ namespace Feedbapp.Controllers
         {
             ViewBag.leaders = s.GetLeaders();
             ViewBag.developers = s.GetDevelopers();
-            Developer? serch = s.SerchDeveloper(id);
+            Developer? serch = s.SerchDeveloperId(id);
             return View(serch);
         }
         [HttpPost]
@@ -162,7 +161,7 @@ namespace Feedbapp.Controllers
         public IActionResult EditPosition(int id)
         {
             ViewBag.developers = s.GetDevelopers();
-            Position? serch = s.SerchPosition(id);
+            Position? serch = s.SerchPositionId(id);
             return View(serch);
         }
         [HttpPost]
@@ -187,7 +186,7 @@ namespace Feedbapp.Controllers
         public IActionResult EditLeader(int id)
         {
             ViewBag.clients = s.GetClients();
-            Leader? serch = s.SerchLeader(id);
+            Leader? serch = s.SerchLeaderId(id);
             return View(serch);
         }
         [HttpPost]
@@ -198,11 +197,70 @@ namespace Feedbapp.Controllers
             return View();
         }
         #endregion
+
+        #region Deletes
         public IActionResult DeleteClient(int id)
         {
-            Client? serch = s.SerchClientId(id);
-            s.DeleteClient(serch);
-            return RedirectToAction();
+            try
+            {
+                Client? serch = s.SerchClientId(id);
+                s.DeleteClient(serch);
+            }
+            catch (Exception e)
+            {
+                ViewBag.mensaje = e.Message;
+            }
+
+            return RedirectToAction("Clients");
+        }
+        public IActionResult DeleteLeader(int id)
+        {
+            try
+            {
+                Leader? serch = s.SerchLeaderId(id);
+                s.DeleteLeader(serch);
+            }
+            catch (Exception e)
+            {
+                ViewBag.mensaje = e.Message;
+            }
+
+            return RedirectToAction("Leaders");
+        }
+        public IActionResult DeleteDeveloper(int id)
+        {
+            try
+            {
+                Developer? serch = s.SerchDeveloperId(id);
+                s.DeleteDeveloper(serch);
+            }
+            catch (Exception e)
+            {
+                ViewBag.mensaje = e.Message;
+            }
+
+            return RedirectToAction("Leaders");
+        }
+        public IActionResult DeletePosition(int id)
+        {
+            try
+            {
+                Position? serch = s.SerchPositionId(id);
+                s.DeletePosition(serch);
+            }
+            catch (Exception e)
+            {
+                ViewBag.mensaje = e.Message;
+            }
+
+            return RedirectToAction("Leaders");
+        }
+        #endregion
+
+
+        public IActionResult SendEmail()
+        {
+           return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

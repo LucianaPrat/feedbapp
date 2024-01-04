@@ -18,6 +18,7 @@ namespace Dominio
             Email = email;
             Client = client;
             Active = true;
+            Removed = false;
         }
     }
 }
