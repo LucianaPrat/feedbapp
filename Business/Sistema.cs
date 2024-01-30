@@ -1,8 +1,12 @@
-﻿using System;
+﻿using Business.Models;
+using Dominio.DTO;
+using Feedbapp.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 
 namespace Dominio
 {
@@ -10,8 +14,9 @@ namespace Dominio
     {
         #region Singleton
         private static Sistema _instancia = null;
-        public Sistema()
+        public Sistema(IEmailService emailService)
         {
+            _emailService = emailService;
             Precarga();
         }
         public static Sistema GetInstancia()
@@ -19,21 +24,22 @@ namespace Dominio
 
             if (_instancia == null)
             {
-                _instancia = new Sistema();
+                _instancia = new Sistema(new EmailService());
             }
             return _instancia;
         }
         #endregion
-        private List<Client> _clients { get; set; } = new List<Client>();
-        private List<Person> _persons { get; set; } = new List<Person>();
+        private List<ClientDTO> _clients { get; set; } = new List<ClientDTO>();
+        private List<PersonDTO> _persons { get; set; } = new List<PersonDTO>();
         private List<Position> _positions { get; set; } = new List<Position>();
         private List<Deliveries> _deliveries { get; set; } = new List<Deliveries>();
+        private IEmailService _emailService;
 
         #region Gets
-        public List<Client> GetClients()
+        public List<ClientDTO> GetClients()
         {
-            List < Client > c = new List < Client >();
-            foreach ( Client client in _clients )
+            List < ClientDTO > c = new List < ClientDTO >();
+            foreach ( ClientDTO client in _clients )
             {
                 if(client.Removed == false)
                 {
@@ -68,6 +74,19 @@ namespace Dominio
             }
             return leaders;
         }
+        public List<Admin> GetAdmins()
+        {
+            List<Admin> admins = new List<Admin>();
+            foreach (var p in _persons)
+            {
+                if (p is Admin && p.Removed == false)
+                {
+                    Admin a = (Admin)p;
+                    admins.Add(a);
+                }
+            }
+            return admins;
+        }
         public List<Position> GetPositions()
         {
             List<Position> pos = new List<Position>();
@@ -87,11 +106,11 @@ namespace Dominio
         #endregion
 
         #region Adds
-        public void AddClient(Client c)
+        public void AddClient(ClientDTO c)
         {
             _clients.Add(c);
         }
-        public void AddPerson(Person p)
+        public void AddPerson(PersonDTO p)
         {
             _persons.Add(p);
         }
@@ -103,14 +122,19 @@ namespace Dominio
         {
             _deliveries.Add(d);
         }
+        public void AddAdmin(Admin a)
+        {
+            a.IsValid();
+            _persons.Add(a);
+        }
         #endregion
 
         #region Preload
         public void Precarga()
         {
-            Client client1 = new Client("Frasal");
-            Client client2 = new Client("Youtube");
-            Leader leader1 = new Leader("Daniel", "Frascarelli", "frasca@gmail.com", client1);
+            ClientDTO client1 = new ClientDTO("Frasal");
+            ClientDTO client2 = new ClientDTO("Youtube");
+            Leader leader1 = new Leader("Daniel", "Frascarelli", "lucianaprates10@gmail.com", client1);
             Leader leader2 = new Leader("Angela", "Diaz", "angela@gmail.com", client2);
             Developer developer1 = new Developer("Luciana", "Prates", "lu@gmail.com", leader1);
             Developer developer2 = new Developer("Martina", "Perez", "martina@gmail.com", leader2);
@@ -128,31 +152,29 @@ namespace Dominio
             AddPosition(position1);
             AddPosition(position2);
 
-            Deliveries deliveries1 = new Deliveries(new DateTime(2001, 10, 10), position1);
-            Deliveries deliveries2 = new Deliveries(new DateTime(2001, 10, 13), position2);
-
-            AddDeliveries(deliveries1);
-            AddDeliveries(deliveries2);
         }
         #endregion
 
         #region Creates
-        public void CreateClient(Client c)
+        public void CreateClient(ClientDTO c)
         {
             if (!_clients.Contains(c))
             {
+                c.IsValid();
                 _clients.Add(c);
             }
             else
             {
                 throw new Exception("Ya existe este cliente");
             }
+
         }
         public void CreateDeveloper(Developer dev)
         {
             List<Developer> devs = GetDevelopers();
             if (!devs.Contains(dev))
             {
+                dev.IsValid();
                 Leader l = SearchLeaderId(dev.Leader.Id);
                 dev.Leader = l;
                 _persons.Add(dev);
@@ -180,7 +202,7 @@ namespace Dominio
         {
             if (!GetLeaders().Contains(l))
             {
-                Client c = SerchClientId(l.Client.Id);
+                ClientDTO c = SerchClientId(l.Client.Id);
                 l.Client = c;
                 _persons.Add(l);
             }
@@ -188,6 +210,12 @@ namespace Dominio
             {
                 throw new Exception("Ya existe esta posicion");
             }
+        }
+        public void CreateDeliverie(Deliveries d)
+        {
+            
+            _deliveries.Add(d);
+            
         }
         #endregion
 
@@ -225,7 +253,7 @@ namespace Dominio
             }
             return null;
         }
-        public Client? SerchClientId(int id)
+        public ClientDTO? SerchClientId(int id)
         {
             foreach (var c in _clients)
             {
@@ -273,9 +301,9 @@ namespace Dominio
         #endregion
 
         #region Edits
-        public void EditClient(Client c)
+        public void EditClient(ClientDTO c)
         {
-            foreach (Client cli in _clients)
+            foreach (ClientDTO cli in _clients)
             {
                 if (cli.Id == c.Id)
                 {
@@ -318,7 +346,7 @@ namespace Dominio
             {
                 if (l.Id == le.Id)
                 {
-                    Client? c = SerchClientId(l.Client.Id);
+                    ClientDTO? c = SerchClientId(l.Client.Id);
                     le.Name = l.Name;
                     le.LastName = l.LastName;
                     le.Client = c;
@@ -328,9 +356,9 @@ namespace Dominio
         #endregion
 
         #region Deletes
-        public void DeleteClient(Client? cli)
+        public void DeleteClient(ClientDTO? cli)
         {
-            foreach (Client c in _clients)
+            foreach (ClientDTO c in _clients)
             {
                 if (c == cli)
                 {
@@ -370,5 +398,30 @@ namespace Dominio
             }
         }
         #endregion
+        public Admin Login(String email, String password)
+        {
+            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
+            {
+                throw new Exception("Los campos no deben ser vacios");
+            }
+            foreach (Admin a in GetAdmins())
+            { //Si los datos recividos coinciden con un usuario registrado permite
+                if (a.Email.Equals(email) && a.Password.Equals(password))
+                {
+                    return a;
+                }
+            }
+            throw new Exception("No existe un administrador con esos datos");
+        }
+
+        public void SendEmail(int positionId,EmailDTO e, EmailConfig emailConfig)
+        {
+            e.IsValid();
+            Position p = SerchPositionId(positionId);
+            CreateDeliverie(new Deliveries(p,e));
+
+            _emailService.SendEmail(e, emailConfig);
+
+        }
     }
 }

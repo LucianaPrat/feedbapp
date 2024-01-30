@@ -28,7 +28,7 @@
             <div class="form-group">
                 <label for="exampleSelect">Clientes</label>
                 <select asp-for="Client.Id" class="form-control" id="exampleSelect">
-                    @foreach (Dominio.Client c in ViewBag.clients)
+                    @foreach (Dominio.DTO.ClientDTO c in ViewBag.clients)
                     {
                         <option value="@c.Id">@c.Name</option>
                     }

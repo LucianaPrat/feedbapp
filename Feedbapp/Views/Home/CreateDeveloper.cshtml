@@ -13,17 +13,14 @@
             <div class="form-group">
                 <label asp-for="Name" class="control-label">Nombre</label>
                 <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="LastName" class="control-label">Apellido</label>
                 <input asp-for="LastName" class="form-control" />
-                <span asp-validation-for="LastName" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Email" class="control-label">Email</label>
                 <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label for="exampleSelect">Lideres</label>
@@ -39,7 +36,7 @@
                 <a asp-action="Developers">Volver</a>
             </div>
         </form>
-        <p>@ViewBag.mensaje</p>
+        <p>@ViewBag.message</p>
     </div>
 </div>
 

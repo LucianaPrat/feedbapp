@@ -1,14 +1,21 @@
+using Dominio;
+using Feedbapp.Services;
+using Microsoft.EntityFrameworkCore;
+
 namespace Feedbapp
 {
     public class Program
     {
         public static void Main(string[] args)
         {
+            
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-
+            builder.Services.AddSession();
+            builder.Services.AddScoped<IEmailService,EmailService>();
+            builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer("name=DefultConnection"));
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -22,9 +29,10 @@ namespace Feedbapp
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
-            app.UseRouting();
+            app.UseRouting();           
 
             app.UseAuthorization();
+            app.UseSession();
 
             app.MapControllerRoute(
                 name: "default",

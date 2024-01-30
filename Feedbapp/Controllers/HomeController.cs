@@ -1,4 +1,6 @@
+using Business.Models;
 using Dominio;
+using Dominio.DTO;
 using Feedbapp.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -10,9 +12,11 @@ namespace Feedbapp.Controllers
         Sistema s = Sistema.GetInstancia();
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        private readonly IConfiguration _config;
+        public HomeController(ILogger<HomeController> logger, IConfiguration config)
         {
             _logger = logger;
+            _config = config;
         }
         public IActionResult Index()
         {
@@ -49,17 +53,17 @@ namespace Feedbapp.Controllers
 
         [HttpPost]
 
-        public IActionResult CreateClient(Client c)
+        public IActionResult CreateClient(ClientDTO c)
         {
             try {
                 s.CreateClient(c);
-                ViewBag.mensaje = "Creado correctamente";
+                ViewBag.Message = "Creado correctamente";
+                return RedirectToAction("Clients");
             }
             catch(Exception e){
-                ViewBag.mensaje = e.Message;
+                ViewBag.Message = e.Message;
             }
-            
-            return RedirectToAction("Clients");
+            return View();            
         }
         public IActionResult CreateDeveloper()
         {
@@ -75,11 +79,13 @@ namespace Feedbapp.Controllers
             try
             {
                 s.CreateDeveloper(d);
-                ViewBag.mensaje = "Creado correctamente";
-            }catch (Exception e){
-                ViewBag.mensaje = e.Message;
+                ViewBag.Message = "Creado correctamente";
+                RedirectToAction("Developers");
+            }
+            catch (Exception e){
+                ViewBag.Message = e.Message;
             }        
-            return RedirectToAction("Developers");
+            return View();
         }
         public IActionResult CreatePosition()
         {
@@ -133,8 +139,8 @@ namespace Feedbapp.Controllers
         public IActionResult EditDeveloper(int id)
         {
             ViewBag.leaders = s.GetLeaders();
-            Developer? serch = s.SerchDeveloperId(id);
-            return View(serch);
+            Developer? search = s.SerchDeveloperId(id);
+            return View(search);
         }
         [HttpPost]
         public IActionResult EditDeveloper(Developer d)
@@ -173,12 +179,12 @@ namespace Feedbapp.Controllers
         }
         public IActionResult EditClient(int id)
         {
-            Client? serch = s.SerchClientId(id);
+            ClientDTO? serch = s.SerchClientId(id);
             return View(serch);
         }
 
         [HttpPost]
-        public IActionResult EditClient(Client c)
+        public IActionResult EditClient(ClientDTO c)
         {
             s.EditClient(c);
             return View();
@@ -203,7 +209,7 @@ namespace Feedbapp.Controllers
         {
             try
             {
-                Client? serch = s.SerchClientId(id);
+                ClientDTO? serch = s.SerchClientId(id);
                 s.DeleteClient(serch);
             }
             catch (Exception e)
@@ -257,10 +263,69 @@ namespace Feedbapp.Controllers
         }
         #endregion
 
-
-        public IActionResult SendEmail()
+        public IActionResult Login()
         {
+           return View();            
+        }
+
+        [HttpPost]
+        public IActionResult Login(string Email, string Password)
+        {
+            try
+            {   
+                Admin? a = s.Login(Email, Password);
+                if (a != null)
+                {//guarda su id y su rol
+                    HttpContext.Session.SetInt32("LoggedId", a.Id);
+                    HttpContext.Session.SetString("LoggedRol", a.GetType().Name);
+                    //dependiendo el rol muestra los index correspondientes
+                    if (a.GetType().Name.Equals("Administrador"))
+                    {
+                        return RedirectToAction("Index", "Administrador");
+                    }
+                }
+            } 
+            catch (Exception ex)
+            {
+                @ViewBag.message = ex.Message;
+            }
+            return View();
+        }
+
+        public IActionResult SendEmail(int id)
+        {
+           Position serch = s.SerchPositionId(id);
+           ViewBag.position = serch;
            return View();
+        }
+        [HttpPost]
+        public IActionResult SendEmail(EmailDTO e, int PositionId)
+        {
+            EmailConfig emailConfig = new EmailConfig();
+            emailConfig.Host = _config.GetSection("Email:Host").Value;
+            emailConfig.Port = _config.GetSection("Email:Port").Value;
+            emailConfig.UserName = _config.GetSection("Email:UserName").Value;
+            emailConfig.Password = _config.GetSection("Email:Password").Value;
+            s.SendEmail(PositionId, e, emailConfig);
+            return RedirectToAction("Positions","Home");
+        }
+        public IActionResult SingIn()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult SingIn(Admin a)
+        {
+            try
+            {                
+                s.AddAdmin(a);
+                ViewBag.message = "Tu cuenta se ha creado correctamente";
+            }
+            catch (Exception ex)
+            {
+                ViewBag.message = ex.Message;
+            }
+            return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

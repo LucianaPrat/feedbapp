@@ -5,24 +5,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Dominio
+namespace Dominio.DTO
 {
-    public class Client
+    public class ClientDTO : IValidation
     {
-        private static int UltimoId { get; set; } = 1;
         public int Id { get; set; }
         public string Name { get; set; }
         public bool Active { get; set; }
         public bool Removed { get; set; }
 
         #region Builders
-        public Client()
+        public ClientDTO()
         {
+            Active = true;
         }
-        public Client(string name)
+        public ClientDTO(string name)
         {
-            Id = UltimoId++;
-            Name = name; 
+            Name = name;
             Active = true;
             Removed = false;
         }
@@ -41,6 +40,21 @@ namespace Dominio
             if (!Removed)
             {
                 Removed = true;
+            }
+        }
+        public virtual void IsValid()
+        {
+            if (string.IsNullOrEmpty(Name))
+            {
+                throw new Exception("El nombre puede estar vacio.");
+            }
+            if (Name.Length > 40)
+            {
+                throw new Exception("El nombre tiene que tener menos de 40 caracteres.");
+            }
+            if (Name.Length < 5)
+            {
+                throw new Exception("El nombre tiene que tener mas de 3 caracteres.");
             }
         }
         #endregion
