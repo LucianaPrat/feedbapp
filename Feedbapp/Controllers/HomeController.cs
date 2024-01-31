@@ -9,14 +9,15 @@ namespace Feedbapp.Controllers
 {
     public class HomeController : Controller
     {
-        Sistema s = Sistema.GetInstancia();
+        private readonly ISistema _sistema;
         private readonly ILogger<HomeController> _logger;
 
         private readonly IConfiguration _config;
-        public HomeController(ILogger<HomeController> logger, IConfiguration config)
+        public HomeController(ILogger<HomeController> logger, IConfiguration config, ISistema sistema)
         {
             _logger = logger;
             _config = config;
+            _sistema = sistema;
         }
         public IActionResult Index()
         {
@@ -52,7 +53,6 @@ namespace Feedbapp.Controllers
         }
 
         [HttpPost]
-
         public IActionResult CreateClient(ClientDTO c)
         {
             try {

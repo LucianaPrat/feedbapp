@@ -1,5 +1,6 @@
 ﻿using Business.Models;
 using Dominio.DTO;
+using Dominio.Entity;
 using Feedbapp.Services;
 using System;
 using System.Collections.Generic;
@@ -10,29 +11,29 @@ using System.Threading.Tasks;
 
 namespace Dominio
 {
-    public class Sistema
+    public class Sistema : ISistema
     {
         #region Singleton
-        private static Sistema _instancia = null;
-        public Sistema(IEmailService emailService)
+        //private static Sistema _instancia = null;
+        public Sistema(IEmailService emailService, ApplicationDbContext context)
         {
-            _emailService = emailService;
+            _emailService = emailService; 
             Precarga();
         }
-        public static Sistema GetInstancia()
-        {
-
-            if (_instancia == null)
-            {
-                _instancia = new Sistema(new EmailService());
-            }
-            return _instancia;
-        }
+        //public static Sistema GetInstancia()
+        //{
+        //    if (_instancia == null)
+        //    {
+        //        _instancia = new Sistema(new EmailService());
+        //    }
+        //    return _instancia;
+        //}
         #endregion
         private List<ClientDTO> _clients { get; set; } = new List<ClientDTO>();
-        private List<PersonDTO> _persons { get; set; } = new List<PersonDTO>();
-        private List<Position> _positions { get; set; } = new List<Position>();
-        private List<Deliveries> _deliveries { get; set; } = new List<Deliveries>();
+        private static List<PersonDTO> _persons { get; set; } = new List<PersonDTO>();
+        private static List<Position> _positions { get; set; } = new List<Position>();
+        private static List<Deliveries> _deliveries { get; set; } = new List<Deliveries>();
+
         private IEmailService _emailService;
 
         #region Gets
@@ -106,9 +107,20 @@ namespace Dominio
         #endregion
 
         #region Adds
-        public void AddClient(ClientDTO c)
+        public void AddClient(ClientDTO clientDTO)
         {
-            _clients.Add(c);
+            // convertir DTO en Entity
+            var clientEntity = new Client
+            {
+                Name = clientDTO.Name                
+            };
+
+            // insertar en la base de datos
+
+            //using (var context = new ApplicationDbContext())
+            //{
+            //    //_clients.Add(c);
+            //}
         }
         public void AddPerson(PersonDTO p)
         {

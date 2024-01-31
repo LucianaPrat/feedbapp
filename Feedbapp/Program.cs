@@ -14,7 +14,8 @@ namespace Feedbapp
             // Add services to the container.
             builder.Services.AddControllersWithViews();
             builder.Services.AddSession();
-            builder.Services.AddScoped<IEmailService,EmailService>();
+            builder.Services.AddScoped<IEmailService, EmailService>();
+            builder.Services.AddScoped<ISistema, Sistema>();
             builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer("name=DefultConnection"));
             var app = builder.Build();
 
