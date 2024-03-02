@@ -1,15 +1,8 @@
 ﻿using Business.Models;
+using Dominio;
 using Dominio.DTO;
-using Dominio.Entity;
-using Feedbapp.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-
-namespace Dominio
+namespace Business
 {
     public interface ISistema
     {
@@ -19,8 +12,7 @@ namespace Dominio
         List<Admin> GetAdmins();
         List<Position> GetPositions();
         List<Deliveries> GetDeliveries();
-
-        void AddClient(ClientDTO clientDTO);
+        //void AddClient(ClientDTO clientDTO);
         void AddPerson(PersonDTO p);
         void AddPosition(Position p);
         void AddDeliveries(Deliveries d);
@@ -35,7 +27,7 @@ namespace Dominio
         Deliveries? SerchDeliveries(int id);
         Leader? SerchLeaderId(int id);
         Developer? SerchDeveloperId(int id);
-        ClientDTO? SerchClientId(int id);
+        ClientDTO? SearchClientId(int id);
 
         Position? SerchPositionId(int id);
 
@@ -50,7 +42,6 @@ namespace Dominio
         void DeleteDeveloper(Developer? dev);
         void DeletePosition(Position? p);
         Admin Login(String email, String password);
-
         void SendEmail(int positionId, EmailDTO e, EmailConfig emailConfig);
     }
 }

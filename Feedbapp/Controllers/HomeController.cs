@@ -1,3 +1,4 @@
+using Business;
 using Business.Models;
 using Dominio;
 using Dominio.DTO;
@@ -26,23 +27,23 @@ namespace Feedbapp.Controllers
         #region Lists
         public IActionResult Clients()
         {
-            return View(s.GetClients());
+            return View(_sistema.GetClients());
         }
         public IActionResult Developers()
         {
-            return View(s.GetDevelopers());
+            return View(_sistema.GetDevelopers());
         }
         public IActionResult Positions()
         {
-            return View(s.GetPositions());
+            return View(_sistema.GetPositions());
         }
         public IActionResult Deliveries()
         {
-            return View(s.GetDeliveries());
+            return View(_sistema.GetDeliveries());
         }
         public IActionResult Leaders()
         {
-            return View(s.GetLeaders());
+            return View(_sistema.GetLeaders());
         }
         #endregion
 
@@ -56,7 +57,7 @@ namespace Feedbapp.Controllers
         public IActionResult CreateClient(ClientDTO c)
         {
             try {
-                s.CreateClient(c);
+                _sistema.CreateClient(c);
                 ViewBag.Message = "Creado correctamente";
                 return RedirectToAction("Clients");
             }
@@ -67,7 +68,7 @@ namespace Feedbapp.Controllers
         }
         public IActionResult CreateDeveloper()
         {
-            ViewBag.leaders = s.GetLeaders();
+            ViewBag.leaders = _sistema.GetLeaders();
             return View();
         }
 
@@ -75,10 +76,10 @@ namespace Feedbapp.Controllers
 
         public IActionResult CreateDeveloper(Developer d)
         {
-            ViewBag.leaders = s.GetLeaders();
+            ViewBag.leaders = _sistema.GetLeaders();
             try
             {
-                s.CreateDeveloper(d);
+                _sistema.CreateDeveloper(d);
                 ViewBag.Message = "Creado correctamente";
                 RedirectToAction("Developers");
             }
@@ -89,7 +90,7 @@ namespace Feedbapp.Controllers
         }
         public IActionResult CreatePosition()
         {
-            ViewBag.developers = s.GetDevelopers();
+            ViewBag.developers = _sistema.GetDevelopers();
             return View();
         }
 
@@ -97,10 +98,10 @@ namespace Feedbapp.Controllers
 
         public IActionResult CreatePosition(Position p)
         {
-            ViewBag.developers = s.GetDevelopers();
+            ViewBag.developers = _sistema.GetDevelopers();
             try
             {                
-                s.CreatePosition(p);                
+                _sistema.CreatePosition(p);                
                 ViewBag.mensaje = "Creado correctamente";
             }
             catch (Exception e)
@@ -113,7 +114,7 @@ namespace Feedbapp.Controllers
         
         public IActionResult CreateLeader()
         {
-            ViewBag.clients = s.GetClients();
+            ViewBag.clients = _sistema.GetClients();
             return View();
         }
 
@@ -122,8 +123,8 @@ namespace Feedbapp.Controllers
         {
             try
             {
-                ViewBag.clients = s.GetClients();
-                s.CreateLeader(p);
+                ViewBag.clients = _sistema.GetClients();
+                _sistema.CreateLeader(p);
                 ViewBag.mensaje = "Creado correctamente";
             }
             catch (Exception e)
@@ -138,68 +139,68 @@ namespace Feedbapp.Controllers
         #region Edits
         public IActionResult EditDeveloper(int id)
         {
-            ViewBag.leaders = s.GetLeaders();
-            Developer? search = s.SerchDeveloperId(id);
+            ViewBag.leaders = _sistema.GetLeaders();
+            Developer? search = _sistema.SerchDeveloperId(id);
             return View(search);
         }
         [HttpPost]
         public IActionResult EditDeveloper(Developer d)
         {
-            ViewBag.leaders = s.GetLeaders();
-            s.EditDeveloper(d);
+            ViewBag.leaders = _sistema.GetLeaders();
+            _sistema.EditDeveloper(d);
             return View();
         }
         public IActionResult EditDeliveries(int id)
         {
-            ViewBag.leaders = s.GetLeaders();
-            ViewBag.developers = s.GetDevelopers();
-            Developer? serch = s.SerchDeveloperId(id);
+            ViewBag.leaders = _sistema.GetLeaders();
+            ViewBag.developers = _sistema.GetDevelopers();
+            Developer? serch = _sistema.SerchDeveloperId(id);
             return View(serch);
         }
         [HttpPost]
         public IActionResult EditDeliveries(Developer d)
         {
-            ViewBag.leaders = s.GetLeaders();
-            ViewBag.developers = s.GetDevelopers();
-            s.EditDeveloper(d);
+            ViewBag.leaders = _sistema.GetLeaders();
+            ViewBag.developers = _sistema.GetDevelopers();
+            _sistema.EditDeveloper(d);
             return View();
         }
         public IActionResult EditPosition(int id)
         {
-            ViewBag.developers = s.GetDevelopers();
-            Position? serch = s.SerchPositionId(id);
+            ViewBag.developers = _sistema.GetDevelopers();
+            Position? serch = _sistema.SerchPositionId(id);
             return View(serch);
         }
         [HttpPost]
         public IActionResult EditPosition(Position d)
         {
-            ViewBag.developers = s.GetDevelopers();
-            s.EditPosition(d);
+            ViewBag.developers = _sistema.GetDevelopers();
+            _sistema.EditPosition(d);
             return View();
         }
         public IActionResult EditClient(int id)
         {
-            ClientDTO? serch = s.SerchClientId(id);
+            ClientDTO? serch = _sistema.SearchClientId(id);
             return View(serch);
         }
 
         [HttpPost]
         public IActionResult EditClient(ClientDTO c)
         {
-            s.EditClient(c);
+            _sistema.EditClient(c);
             return View();
         }
         public IActionResult EditLeader(int id)
         {
-            ViewBag.clients = s.GetClients();
-            Leader? serch = s.SerchLeaderId(id);
+            ViewBag.clients = _sistema.GetClients();
+            Leader? serch = _sistema.SerchLeaderId(id);
             return View(serch);
         }
         [HttpPost]
         public IActionResult EditLeader(Leader l)
         {
-            ViewBag.clients = s.GetClients();
-            s.EditLeader(l);
+            ViewBag.clients = _sistema.GetClients();
+            _sistema.EditLeader(l);
             return View();
         }
         #endregion
@@ -209,8 +210,8 @@ namespace Feedbapp.Controllers
         {
             try
             {
-                ClientDTO? serch = s.SerchClientId(id);
-                s.DeleteClient(serch);
+                ClientDTO? serch = _sistema.SearchClientId(id);
+                _sistema.DeleteClient(serch);
             }
             catch (Exception e)
             {
@@ -223,8 +224,8 @@ namespace Feedbapp.Controllers
         {
             try
             {
-                Leader? serch = s.SerchLeaderId(id);
-                s.DeleteLeader(serch);
+                Leader? serch = _sistema.SerchLeaderId(id);
+                _sistema.DeleteLeader(serch);
             }
             catch (Exception e)
             {
@@ -237,8 +238,8 @@ namespace Feedbapp.Controllers
         {
             try
             {
-                Developer? serch = s.SerchDeveloperId(id);
-                s.DeleteDeveloper(serch);
+                Developer? serch = _sistema.SerchDeveloperId(id);
+                _sistema.DeleteDeveloper(serch);
             }
             catch (Exception e)
             {
@@ -251,8 +252,8 @@ namespace Feedbapp.Controllers
         {
             try
             {
-                Position? serch = s.SerchPositionId(id);
-                s.DeletePosition(serch);
+                Position? serch = _sistema.SerchPositionId(id);
+                _sistema.DeletePosition(serch);
             }
             catch (Exception e)
             {
@@ -273,7 +274,7 @@ namespace Feedbapp.Controllers
         {
             try
             {   
-                Admin? a = s.Login(Email, Password);
+                Admin? a = _sistema.Login(Email, Password);
                 if (a != null)
                 {//guarda su id y su rol
                     HttpContext.Session.SetInt32("LoggedId", a.Id);
@@ -294,7 +295,7 @@ namespace Feedbapp.Controllers
 
         public IActionResult SendEmail(int id)
         {
-           Position serch = s.SerchPositionId(id);
+           Position serch = _sistema.SerchPositionId(id);
            ViewBag.position = serch;
            return View();
         }
@@ -306,7 +307,7 @@ namespace Feedbapp.Controllers
             emailConfig.Port = _config.GetSection("Email:Port").Value;
             emailConfig.UserName = _config.GetSection("Email:UserName").Value;
             emailConfig.Password = _config.GetSection("Email:Password").Value;
-            s.SendEmail(PositionId, e, emailConfig);
+            _sistema.SendEmail(PositionId, e, emailConfig);
             return RedirectToAction("Positions","Home");
         }
         public IActionResult SingIn()
@@ -318,7 +319,7 @@ namespace Feedbapp.Controllers
         {
             try
             {                
-                s.AddAdmin(a);
+                _sistema.AddAdmin(a);
                 ViewBag.message = "Tu cuenta se ha creado correctamente";
             }
             catch (Exception ex)

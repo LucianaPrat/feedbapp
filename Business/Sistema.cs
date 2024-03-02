@@ -1,53 +1,44 @@
 ﻿using Business.Models;
+using Dominio;
+using Dominio.Accessors;
 using Dominio.DTO;
 using Dominio.Entity;
 using Feedbapp.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-
-namespace Dominio
+namespace Business
 {
     public class Sistema : ISistema
     {
-        #region Singleton
-        //private static Sistema _instancia = null;
-        public Sistema(IEmailService emailService, ApplicationDbContext context)
-        {
-            _emailService = emailService; 
-            Precarga();
-        }
-        //public static Sistema GetInstancia()
-        //{
-        //    if (_instancia == null)
-        //    {
-        //        _instancia = new Sistema(new EmailService());
-        //    }
-        //    return _instancia;
-        //}
-        #endregion
-        private List<ClientDTO> _clients { get; set; } = new List<ClientDTO>();
         private static List<PersonDTO> _persons { get; set; } = new List<PersonDTO>();
         private static List<Position> _positions { get; set; } = new List<Position>();
         private static List<Deliveries> _deliveries { get; set; } = new List<Deliveries>();
 
         private IEmailService _emailService;
+        private IClientAccessor _clientAccesor;
+
+        public Sistema(IEmailService emailService, IClientAccessor clientAccesor)
+        {
+            _emailService = emailService;
+            _clientAccesor = clientAccesor;
+
+            Precarga();
+        }         
 
         #region Gets
         public List<ClientDTO> GetClients()
         {
-            List < ClientDTO > c = new List < ClientDTO >();
-            foreach ( ClientDTO client in _clients )
+            List<ClientDTO> results = new List<ClientDTO>();
+
+            var clients = _clientAccesor.GetAll();
+
+            foreach ( ClientDTO client in clients )
             {
                 if(client.Removed == false)
                 {
-                    c.Add( client );
+                    results.Add( client );
                 }
             }
-            return c;
+            return results;
         }
         public List<Developer> GetDevelopers()
         {
@@ -107,21 +98,23 @@ namespace Dominio
         #endregion
 
         #region Adds
-        public void AddClient(ClientDTO clientDTO)
-        {
-            // convertir DTO en Entity
-            var clientEntity = new Client
-            {
-                Name = clientDTO.Name                
-            };
+        //public void AddClient(ClientDTO clientDTO)
+        //{
+        //    _clientAccesor.Save(clientDTO);
 
-            // insertar en la base de datos
+        //    // convertir DTO en Entity
+        //    //var clientEntity = new Client
+        //    //{
+        //    //    Name = clientDTO.Name                
+        //    //};
 
-            //using (var context = new ApplicationDbContext())
-            //{
-            //    //_clients.Add(c);
-            //}
-        }
+        //    // insertar en la base de datos
+
+        //    //using (var context = new ApplicationDbContext())
+        //    //{
+        //    //    //_clients.Add(c);
+        //    //}
+        //}
         public void AddPerson(PersonDTO p)
         {
             _persons.Add(p);
@@ -144,25 +137,25 @@ namespace Dominio
         #region Preload
         public void Precarga()
         {
-            ClientDTO client1 = new ClientDTO("Frasal");
-            ClientDTO client2 = new ClientDTO("Youtube");
-            Leader leader1 = new Leader("Daniel", "Frascarelli", "lucianaprates10@gmail.com", client1);
-            Leader leader2 = new Leader("Angela", "Diaz", "angela@gmail.com", client2);
-            Developer developer1 = new Developer("Luciana", "Prates", "lu@gmail.com", leader1);
-            Developer developer2 = new Developer("Martina", "Perez", "martina@gmail.com", leader2);
+            //ClientDTO client1 = new ClientDTO("Frasal");
+            //ClientDTO client2 = new ClientDTO("Youtube");
+            //Leader leader1 = new Leader("Daniel", "Frascarelli", "lucianaprates10@gmail.com", client1);
+            //Leader leader2 = new Leader("Angela", "Diaz", "angela@gmail.com", client2);
+            //Developer developer1 = new Developer("Luciana", "Prates", "lu@gmail.com", leader1);
+            //Developer developer2 = new Developer("Martina", "Perez", "martina@gmail.com", leader2);
 
-            AddClient(client1);
-            AddClient(client2);
-            AddPerson(leader1);
-            AddPerson(leader2);
-            AddPerson(developer1);
-            AddPerson(developer2);
+            //AddClient(client1);
+            //AddClient(client2);
+            //AddPerson(leader1);
+            //AddPerson(leader2);
+            //AddPerson(developer1);
+            //AddPerson(developer2);
 
-            Position position1 = new Position(Recurrence.OtherWeek, "Hola", developer1);
-            Position position2 = new Position(Recurrence.Weekly, "Chau", developer2);
+            //Position position1 = new Position(Recurrence.OtherWeek, "Hola", developer1);
+            //Position position2 = new Position(Recurrence.Weekly, "Chau", developer2);
 
-            AddPosition(position1);
-            AddPosition(position2);
+            //AddPosition(position1);
+            //AddPosition(position2);
 
         }
         #endregion
@@ -170,15 +163,17 @@ namespace Dominio
         #region Creates
         public void CreateClient(ClientDTO c)
         {
-            if (!_clients.Contains(c))
-            {
-                c.IsValid();
-                _clients.Add(c);
-            }
-            else
-            {
-                throw new Exception("Ya existe este cliente");
-            }
+            _clientAccesor.Save(c);
+
+            //if (!_clients.Contains(c))
+            //{
+            //    c.IsValid();
+            //    _clients.Add(c);
+            //}
+            //else
+            //{
+            //    throw new Exception("Ya existe este cliente");
+            //}
 
         }
         public void CreateDeveloper(Developer dev)
@@ -214,7 +209,7 @@ namespace Dominio
         {
             if (!GetLeaders().Contains(l))
             {
-                ClientDTO c = SerchClientId(l.Client.Id);
+                ClientDTO c = SearchClientId(l.Client.Id);
                 l.Client = c;
                 _persons.Add(l);
             }
@@ -265,16 +260,18 @@ namespace Dominio
             }
             return null;
         }
-        public ClientDTO? SerchClientId(int id)
+        public ClientDTO? SearchClientId(int id)
         {
-            foreach (var c in _clients)
-            {
-                if (c.Id == id)
-                {
-                    return c;
-                }
-            }
-            return null;
+            return _clientAccesor.GetById(id);
+
+            //foreach (var c in _clients)
+            //{
+            //    if (c.Id == id)
+            //    {
+            //        return c;
+            //    }
+            //}
+            //return null;
         }
         private Leader? SearchLeaderId(int leaderID)
         {
@@ -315,14 +312,16 @@ namespace Dominio
         #region Edits
         public void EditClient(ClientDTO c)
         {
-            foreach (ClientDTO cli in _clients)
-            {
-                if (cli.Id == c.Id)
-                {
-                    cli.Name = c.Name;
-                    cli.Active = c.Active;
-                }
-            }
+            _clientAccesor.Update(c);
+
+            //foreach (ClientDTO cli in _clients)
+            //{
+            //    if (cli.Id == c.Id)
+            //    {
+            //        cli.Name = c.Name;
+            //        cli.Active = c.Active;
+            //    }
+            //}
         }
         public void EditDeveloper(Developer d)
         {
@@ -358,7 +357,7 @@ namespace Dominio
             {
                 if (l.Id == le.Id)
                 {
-                    ClientDTO? c = SerchClientId(l.Client.Id);
+                    ClientDTO? c = SearchClientId(l.Client.Id);
                     le.Name = l.Name;
                     le.LastName = l.LastName;
                     le.Client = c;
@@ -370,13 +369,14 @@ namespace Dominio
         #region Deletes
         public void DeleteClient(ClientDTO? cli)
         {
-            foreach (ClientDTO c in _clients)
-            {
-                if (c == cli)
-                {
-                    c.Delete();
-                }
-            }
+            _clientAccesor.Delete(cli);
+            //foreach (ClientDTO c in _clients)
+            //{
+            //    if (c == cli)
+            //    {
+            //        c.Delete();
+            //    }
+            //}
         }
 
         public void DeleteLeader(Leader? li)
