@@ -1,6 +1,7 @@
 using Business;
 using Dominio;
-using Dominio.Accessors;
+using Dominio.Accessors.Client;
+using Dominio.Accessors.Email;
 using Dominio.DTO;
 using Feedbapp.Services;
 using Microsoft.EntityFrameworkCore;
@@ -20,6 +21,7 @@ namespace Feedbapp
             builder.Services.AddScoped<IEmailService, EmailService>();
             builder.Services.AddScoped<ISistema, Sistema>();
             builder.Services.AddScoped<IClientAccessor, ClientAccessor>();
+            builder.Services.AddScoped<IEmailAccessor, EmailAccessor>();
             builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer("name=DefultConnection"));
             var app = builder.Build();
 

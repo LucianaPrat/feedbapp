@@ -1,6 +1,7 @@
 ﻿using Business.Models;
 using Dominio;
-using Dominio.Accessors;
+using Dominio.Accessors.Client;
+using Dominio.Accessors.Email;
 using Dominio.DTO;
 using Dominio.Entity;
 using Feedbapp.Services;
@@ -15,12 +16,13 @@ namespace Business
 
         private IEmailService _emailService;
         private IClientAccessor _clientAccesor;
+        private IEmailAccessor _emailAccesor;
 
-        public Sistema(IEmailService emailService, IClientAccessor clientAccesor)
+        public Sistema(IEmailService emailService, IClientAccessor clientAccesor, IEmailAccessor emailAccesor)
         {
             _emailService = emailService;
             _clientAccesor = clientAccesor;
-
+            _emailAccesor = emailAccesor;
             Precarga();
         }         
 
@@ -137,25 +139,24 @@ namespace Business
         #region Preload
         public void Precarga()
         {
-            //ClientDTO client1 = new ClientDTO("Frasal");
-            //ClientDTO client2 = new ClientDTO("Youtube");
-            //Leader leader1 = new Leader("Daniel", "Frascarelli", "lucianaprates10@gmail.com", client1);
-            //Leader leader2 = new Leader("Angela", "Diaz", "angela@gmail.com", client2);
-            //Developer developer1 = new Developer("Luciana", "Prates", "lu@gmail.com", leader1);
-            //Developer developer2 = new Developer("Martina", "Perez", "martina@gmail.com", leader2);
+            ClientDTO client1 = SearchClientId(1);
+            ClientDTO client2 = SearchClientId(1);
 
-            //AddClient(client1);
-            //AddClient(client2);
-            //AddPerson(leader1);
-            //AddPerson(leader2);
-            //AddPerson(developer1);
-            //AddPerson(developer2);
+            Leader leader1 = new Leader("Daniel", "Frascarelli", "lucianaprates10@gmail.com", client1);
+            Leader leader2 = new Leader("Angela", "Diaz", "angela@gmail.com", client2);
+            Developer developer1 = new Developer("Luciana", "Prates", "lu@gmail.com", leader1);
+            Developer developer2 = new Developer("Martina", "Perez", "martina@gmail.com", leader2);
 
-            //Position position1 = new Position(Recurrence.OtherWeek, "Hola", developer1);
-            //Position position2 = new Position(Recurrence.Weekly, "Chau", developer2);
+            AddPerson(leader1);
+            AddPerson(leader2);
+            AddPerson(developer1);
+            AddPerson(developer2);
 
-            //AddPosition(position1);
-            //AddPosition(position2);
+            Position position1 = new Position(Recurrence.OtherWeek, "Hola", developer1);
+            Position position2 = new Position(Recurrence.Weekly, "Chau", developer2);
+
+            AddPosition(position1);
+            AddPosition(position2);
 
         }
         #endregion

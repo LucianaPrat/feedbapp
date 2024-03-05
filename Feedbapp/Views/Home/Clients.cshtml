@@ -1,37 +1,40 @@
 ﻿@model IEnumerable<Dominio.DTO.ClientDTO>
-    
-<h1>Clientes</h1>
-@if (Model.Count() == 0)
-{
-    <p>No existen clientes</p>
-}
-else
-{  
-    <div>
-        <table class="table table-bordered table-striped">
-            <thead>
-                <tr>
-                    <th>Nombre</th>
-                    <th>Activo</th>
-                    <th></th>
-                </tr>
-            </thead>
-            @foreach (Dominio.DTO.ClientDTO c in Model)
-            {
-                <tbody>
-                    <tr>
-                        <td>@c.Name</td>
-                        <td>@c.Active</td>
-                        <td>
-                            @Html.ActionLink("Editar", "EditClient", "Home", new { id = c.Id })
-                            @Html.ActionLink("Delete", "DeleteClient", "Home", new { id = c.Id })
-                        </td>
-                    </tr>
 
-                </tbody>
+<div class="text-center" style="padding-top: 15px; padding-bottom: 10px;">
+    <h1 style="color: #333A73; font-weight: bold; font-size: 2.5rem; margin-bottom: 20px;">Clientes</h1>
+</div>
+
+<div class="table-responsive" style="padding-top: 20px; padding-bottom: 20px;">
+    <table class="table-custom">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Activo</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var c in Model)
+            {
+                <tr>
+                    <td>@c.Name</td>
+                    <td>@c.Active</td>
+                    <td>
+                        <a href="@Url.Action("EditClient", "Home", new { id = c.Id })" class="btn-custom btn-primary">Editar</a>
+                        <a href="@Url.Action("DeleteClient", "Home", new { id = c.Id })" class="btn-custom btn-secondary">Eliminar</a>
+                    </td>
+                </tr>
             }
-        </table>       
-    </div>    
+        </tbody>
+    </table>
+</div>
+
+
+<div class="text-center mt-3" style="padding-top: 20px; padding-bottom: 20px;">
+    <a href="@Url.Action("CreateClient", "Home")" class="btn-custom btn-tertiary" style="padding: 10px 20px;">Crear cliente</a>
+</div>
+
+@if (!string.IsNullOrEmpty(ViewBag.Mensaje))
+{
+    <p class="text-center mt-3">@ViewBag.Mensaje</p>
 }
-<a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="CreateClient">Crear cliente</a>
-<p>@ViewBag.Mensaje</p>

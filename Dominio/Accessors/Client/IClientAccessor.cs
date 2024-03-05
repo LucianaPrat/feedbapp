@@ -1,6 +1,6 @@
 ﻿using Dominio.DTO;
 
-namespace Dominio.Accessors
+namespace Dominio.Accessors.Client
 {
     public interface IClientAccessor : IAccessor<ClientDTO>
     {
