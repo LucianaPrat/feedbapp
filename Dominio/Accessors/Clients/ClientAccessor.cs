@@ -1,11 +1,11 @@
 ﻿using Dominio.DTO;
-using Dominio.Entity; 
+using Dominio.Entity;
 
-namespace Dominio.Accessors
+namespace Dominio.Accessors.Clients
 {
     public class ClientAccessor : IClientAccessor
     {
-        private ApplicationDbContext _context; 
+        private ApplicationDbContext _context;
 
         public ClientAccessor(ApplicationDbContext context)
         {
@@ -24,11 +24,11 @@ namespace Dominio.Accessors
                                    .Select(c => ConvertToDTO(c))
                                    .ToList();
         }
-         
+
         public ClientDTO GetById(int id)
         {
             var client = _context.Clients.FirstOrDefault(c => c.Id == id);
-            if(client == null)
+            if (client == null)
             {
                 throw new Exception("Not found client with id " + id);
             }
@@ -73,7 +73,7 @@ namespace Dominio.Accessors
             _context.SaveChanges();
         }
 
-        ClientDTO ConvertToDTO(Client client)
+     public static   ClientDTO ConvertToDTO(Client client)
         {
             return new ClientDTO
             {
@@ -84,7 +84,7 @@ namespace Dominio.Accessors
             };
         }
 
-        Client ConvertToEntity(ClientDTO client)
+        public static Client ConvertToEntity(ClientDTO client)
         {
             return new Client
             {

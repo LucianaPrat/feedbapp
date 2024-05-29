@@ -1,6 +1,7 @@
 ﻿using Business.Models;
 using Dominio;
-using Dominio.Accessors;
+using Dominio.Accessors.Clients;
+using Dominio.Accessors.Leaders;
 using Dominio.DTO;
 using Dominio.Entity;
 using Feedbapp.Services;
@@ -15,11 +16,13 @@ namespace Business
 
         private IEmailService _emailService;
         private IClientAccessor _clientAccesor;
+        private ILeaderAccessor _leaderAccesor;
 
-        public Sistema(IEmailService emailService, IClientAccessor clientAccesor)
+        public Sistema(IEmailService emailService, IClientAccessor clientAccesor, ILeaderAccessor leaderAccesor)
         {
             _emailService = emailService;
             _clientAccesor = clientAccesor;
+            _leaderAccesor = leaderAccesor;
 
             Precarga();
         }         
@@ -53,19 +56,22 @@ namespace Business
             }
             return Developers;
         }
-        public List<Leader> GetLeaders()
+        public List<LeaderDTO> GetLeaders()
         {
-            List<Leader> leaders = new List<Leader>();
-            foreach (var p in _persons)
+            List<LeaderDTO> results = new List<LeaderDTO>();
+
+            var leaders = _leaderAccesor.GetAll();
+
+            foreach (LeaderDTO leader in leaders)
             {
-                if (p is Leader && p.Removed == false)
+                if (leader.Removed == false)
                 {
-                    Leader d = (Leader)p;
-                    leaders.Add(d);
+                    results.Add(leader);
                 }
             }
-            return leaders;
+            return results;
         }
+
         public List<Admin> GetAdmins()
         {
             List<Admin> admins = new List<Admin>();
@@ -182,7 +188,7 @@ namespace Business
             if (!devs.Contains(dev))
             {
                 dev.IsValid();
-                Leader l = SearchLeaderId(dev.Leader.Id);
+                LeaderDTO l = SearchLeaderId(dev.Leader.Id);
                 dev.Leader = l;
                 _persons.Add(dev);
             }
@@ -205,18 +211,20 @@ namespace Business
                 throw new Exception("Ya existe esta posicion");
             }
         }
-        public void CreateLeader(Leader l)
+        public void CreateLeader(LeaderDTO l)
         {
-            if (!GetLeaders().Contains(l))
-            {
-                ClientDTO c = SearchClientId(l.Client.Id);
-                l.Client = c;
-                _persons.Add(l);
-            }
-            else
-            {
-                throw new Exception("Ya existe esta posicion");
-            }
+            _leaderAccesor.Save(l);
+            // TODO
+            //if (!GetLeaders().Contains(l))
+            //{
+            //    ClientDTO c = SearchClientId(l.Client.Id);
+            //    l.Client = c;
+            //    _persons.Add(l);
+            //}
+            //else
+            //{
+            //    throw new Exception("Ya existe esta posicion");
+            //}
         }
         public void CreateDeliverie(Deliveries d)
         {
@@ -238,9 +246,9 @@ namespace Business
             }
             return null;
         }
-        public Leader? SerchLeaderId(int id)
+        public LeaderDTO? SerchLeaderId(int id)
         {
-            foreach (Leader l in GetLeaders())
+            foreach (LeaderDTO l in GetLeaders())
             {
                 if (l.Id == id)
                 {
@@ -273,9 +281,9 @@ namespace Business
             //}
             //return null;
         }
-        private Leader? SearchLeaderId(int leaderID)
+        private LeaderDTO? SearchLeaderId(int leaderID)
         {
-            foreach (Leader l in GetLeaders())
+            foreach (LeaderDTO l in GetLeaders())
             {
                 if (l.Id == leaderID)
                 {
@@ -313,15 +321,6 @@ namespace Business
         public void EditClient(ClientDTO c)
         {
             _clientAccesor.Update(c);
-
-            //foreach (ClientDTO cli in _clients)
-            //{
-            //    if (cli.Id == c.Id)
-            //    {
-            //        cli.Name = c.Name;
-            //        cli.Active = c.Active;
-            //    }
-            //}
         }
         public void EditDeveloper(Developer d)
         {
@@ -329,7 +328,7 @@ namespace Business
             {
                 if (dev.Id == d.Id)
                 {
-                    Leader l = SearchLeaderId(d.Leader.Id);
+                    LeaderDTO l = SearchLeaderId(d.Leader.Id);
                     dev.Name = d.Name;
                     dev.LastName = d.LastName;
                     dev.Email = d.Email;
@@ -351,44 +350,23 @@ namespace Business
                 }
             }
         }
-        public void EditLeader(Leader l)
+        public void EditLeader(LeaderDTO l)
         {
-            foreach (Leader le in GetLeaders())
-            {
-                if (l.Id == le.Id)
-                {
-                    ClientDTO? c = SearchClientId(l.Client.Id);
-                    le.Name = l.Name;
-                    le.LastName = l.LastName;
-                    le.Client = c;
-                }
-            }
+            _leaderAccesor.Update(l);
         }
         #endregion
 
         #region Deletes
-        public void DeleteClient(ClientDTO? cli)
+        public void DeleteClient(ClientDTO c)
         {
-            _clientAccesor.Delete(cli);
-            //foreach (ClientDTO c in _clients)
-            //{
-            //    if (c == cli)
-            //    {
-            //        c.Delete();
-            //    }
-            //}
+            _clientAccesor.Delete(c);
         }
 
-        public void DeleteLeader(Leader? li)
+        public void DeleteLeader(LeaderDTO l)
         {
-            foreach (var l in _persons)
-            {
-                if (l == li)
-                {
-                    l.Delete();
-                }
-            }
+            _leaderAccesor.Delete(l);
         }
+
         public void DeleteDeveloper(Developer? dev)
         {
             foreach (var d in _persons)

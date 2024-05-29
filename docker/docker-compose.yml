@@ -1,0 +1,16 @@
+version: "3.9"
+services:
+  sql_server_feedbapp:
+    container_name: sql_server_feedbapp_container
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    ports:
+      - "51433:1433"
+    environment:
+      ACCEPT_EULA: Y
+      MSSQL_SA_PASSWORD: Feedbapp#App
+    volumes:
+      - D:\trabajo\stepup\feedbapp\database:/var/opt/mssql/data
+    deploy:
+      resources:
+        limits:
+          memory: 2GB

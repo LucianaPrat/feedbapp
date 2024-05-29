@@ -10,11 +10,11 @@ namespace Dominio
 {
     public class Developer : PersonDTO, IValidation
     {
-        public Leader? Leader { get; set; } 
+        public LeaderDTO? Leader { get; set; } 
         public Developer() : base() {             
         }
 
-        public Developer(string name,string lastName, string email, Leader leader) : base(name,lastName,email) 
+        public Developer(string name,string lastName, string email, LeaderDTO leader) : base(name,lastName,email) 
         {
             Leader = leader;
         }

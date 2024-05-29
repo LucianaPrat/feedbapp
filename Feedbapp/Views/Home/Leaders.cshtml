@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Dominio.Leader>
+﻿@model IEnumerable<Dominio.DTO.LeaderDTO>
     
 <h1>Leaders</h1>
 @if (Model.Count() == 0)
@@ -18,7 +18,7 @@ else
                     <th></th>
                 </tr>
             </thead>
-            @foreach (Dominio.Leader l in Model)
+            @foreach (Dominio.DTO.LeaderDTO l in Model)
             {
                 <tbody>
                     <tr>

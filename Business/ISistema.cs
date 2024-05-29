@@ -1,6 +1,7 @@
 ﻿using Business.Models;
 using Dominio;
 using Dominio.DTO;
+using Dominio.Entity;
 
 namespace Business
 {
@@ -8,7 +9,7 @@ namespace Business
     {
         List<ClientDTO> GetClients();
         List<Developer> GetDevelopers();
-        List<Leader> GetLeaders();
+        List<LeaderDTO> GetLeaders();
         List<Admin> GetAdmins();
         List<Position> GetPositions();
         List<Deliveries> GetDeliveries();
@@ -22,10 +23,10 @@ namespace Business
         void CreateDeveloper(Developer dev);
 
         void CreatePosition(Position p);
-        void CreateLeader(Leader l);
+        void CreateLeader(LeaderDTO l);
         void CreateDeliverie(Deliveries d);
         Deliveries? SerchDeliveries(int id);
-        Leader? SerchLeaderId(int id);
+        LeaderDTO? SerchLeaderId(int id);
         Developer? SerchDeveloperId(int id);
         ClientDTO? SearchClientId(int id);
 
@@ -34,11 +35,11 @@ namespace Business
         void EditClient(ClientDTO c);
         void EditDeveloper(Developer d);
         void EditPosition(Position p);
-        void EditLeader(Leader l);
+        void EditLeader(LeaderDTO l);
 
         void DeleteClient(ClientDTO? cli);
 
-        void DeleteLeader(Leader? li);
+        void DeleteLeader(LeaderDTO? li);
         void DeleteDeveloper(Developer? dev);
         void DeletePosition(Position? p);
         Admin Login(String email, String password);

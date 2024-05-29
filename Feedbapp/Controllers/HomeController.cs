@@ -2,6 +2,7 @@ using Business;
 using Business.Models;
 using Dominio;
 using Dominio.DTO;
+using Dominio.Entity;
 using Feedbapp.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -114,16 +115,15 @@ namespace Feedbapp.Controllers
         
         public IActionResult CreateLeader()
         {
-            ViewBag.clients = _sistema.GetClients();
+            ViewBag.Clients = _sistema.GetClients();
             return View();
         }
 
         [HttpPost]
-        public IActionResult CreateLeader(Leader p)
+        public IActionResult CreateLeader(LeaderDTO p)
         {
             try
             {
-                ViewBag.clients = _sistema.GetClients();
                 _sistema.CreateLeader(p);
                 ViewBag.mensaje = "Creado correctamente";
             }
@@ -193,11 +193,11 @@ namespace Feedbapp.Controllers
         public IActionResult EditLeader(int id)
         {
             ViewBag.clients = _sistema.GetClients();
-            Leader? serch = _sistema.SerchLeaderId(id);
+            LeaderDTO? serch = _sistema.SerchLeaderId(id);
             return View(serch);
         }
         [HttpPost]
-        public IActionResult EditLeader(Leader l)
+        public IActionResult EditLeader(LeaderDTO l)
         {
             ViewBag.clients = _sistema.GetClients();
             _sistema.EditLeader(l);
@@ -224,7 +224,7 @@ namespace Feedbapp.Controllers
         {
             try
             {
-                Leader? serch = _sistema.SerchLeaderId(id);
+                LeaderDTO? serch = _sistema.SerchLeaderId(id);
                 _sistema.DeleteLeader(serch);
             }
             catch (Exception e)

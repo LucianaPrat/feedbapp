@@ -1,4 +1,4 @@
-﻿@model Dominio.Leader
+﻿@model Dominio.DTO.LeaderDTO
 
 @{
     ViewData["Title"] = "EditLeader";
@@ -28,7 +28,7 @@
             </div>
             <div class="form-group">
                 <label for="exampleSelect">Clientes</label>
-                <select asp-for="Client.Id" class="form-control" id="exampleSelect">
+                <select asp-for="ClientId" class="form-control" id="exampleSelect">
                     @foreach (Dominio.DTO.ClientDTO c in ViewBag.clients)
                     {
                         <option value="@c.Id">@c.Name</option>
@@ -41,7 +41,7 @@
                 </label>
             </div>
             <div class="form-group">
-                <input type="submit" value="Cambiar" class="btn btn-primary" />
+                <input type="submit" value="Guardar" class="btn btn-primary" />
             </div>
         </form>
     </div>
