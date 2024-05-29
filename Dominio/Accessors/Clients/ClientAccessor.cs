@@ -1,11 +1,7 @@
 ﻿using Dominio.DTO;
 using Dominio.Entity;
 
-<<<<<<<< HEAD:Dominio/Accessors/Clients/ClientAccessor.cs
 namespace Dominio.Accessors.Clients
-========
-namespace Dominio.Accessors.Client
->>>>>>>> c7611e51e40c18115851cd6693e74ed16c6de037:Dominio/Accessors/Client/ClientAccessor.cs
 {
     public class ClientAccessor : IClientAccessor
     {
@@ -78,11 +74,7 @@ namespace Dominio.Accessors.Client
             _context.SaveChanges();
         }
 
-<<<<<<<< HEAD:Dominio/Accessors/Clients/ClientAccessor.cs
      public static   ClientDTO ConvertToDTO(Client client)
-========
-        ClientDTO ConvertToDTO(Entity.Client client)
->>>>>>>> c7611e51e40c18115851cd6693e74ed16c6de037:Dominio/Accessors/Client/ClientAccessor.cs
         {
             return new ClientDTO
             {
@@ -93,11 +85,7 @@ namespace Dominio.Accessors.Client
             };
         }
 
-<<<<<<<< HEAD:Dominio/Accessors/Clients/ClientAccessor.cs
         public static Client ConvertToEntity(ClientDTO client)
-========
-        Entity.Client ConvertToEntity(ClientDTO client)
->>>>>>>> c7611e51e40c18115851cd6693e74ed16c6de037:Dominio/Accessors/Client/ClientAccessor.cs
         {
             return new Entity.Client
             {

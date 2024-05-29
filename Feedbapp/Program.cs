@@ -2,7 +2,6 @@ using Business;
 using Dominio;
 using Dominio.Accessors.Clients;
 using Dominio.Accessors.Leaders;
-using Dominio.Accessors.Client;
 using Dominio.Accessors.Email;
 using Dominio.DTO;
 using Feedbapp.Services;
