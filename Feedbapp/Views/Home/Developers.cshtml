@@ -1,39 +1,46 @@
 ﻿@model IEnumerable<Dominio.Developer>
 
-<h1>Developers</h1>
+<div class="text-center" style="padding-top: 15px; padding-bottom: 10px;">
+    <h1 style="color: #333A73; font-weight: bold; font-size: 2.5rem; margin-bottom: 20px;">Developer</h1>
+</div>
+
 @if (Model.Count() == 0)
 {
-    <p>No existen developers</p>
+    <div style="text-align: center;">
+        <p>No existen developers</p>
+    </div>
 }
 else
 {
-    <div>
-        <table class="table table-bordered table-striped">
+    <div class="table-responsive" style="padding-top: 20px; padding-bottom: 20px;">
+        <table class="table-custom">
             <thead>
                 <tr>
-                    <th>Nombre y Apellido</th>                    
+                    <th>Nombre y Apellido</th>
                     <th>Email</th>
                     <th>Lider</th>
                     <th>Activo</th>
                     <th></th>
                 </tr>
             </thead>
-            @foreach (Dominio.Developer d in Model)
-            {
-                <tbody>
+            <tbody>
+                @foreach (Dominio.Developer d in Model)
+                {
                     <tr>
                         <td>@d.Name @d.LastName</td>
                         <td>@d.Email</td>
                         <td>@d.Leader.Name @d.Leader.LastName</td>
                         <td>@d.Active</td>
-                        <td>
-                            @Html.ActionLink("Editar", "EditDeveloper", "Home", new { id = d.Id })
-                            @Html.ActionLink("Borrar", "DeleteDeveloper", "Home", new { id = d.Id })
+                        <td>                           
+                            <a href="@Url.Action("EditDeveloper", "Home", new { id = d.Id })" class="btn-custom btn-primary">Editar</a>
+                            <a href="@Url.Action("DeleteDeveloper", "Home", new { id = d.Id })" class="btn-custom btn-secondary">Eliminar</a>
                         </td>
                     </tr>
-                </tbody>
-            }
+                }
+            </tbody>
         </table>
     </div>
 }
-<a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="CreateDeveloper">Crear developer</a>
+<div class="text-center mt-3" style="padding-top: 20px; padding-bottom: 20px;">
+    <a href="@Url.Action("CreateDeveloper", "Home")" class="btn-custom btn-tertiary" style="padding: 10px 20px;">Crear cliente</a>
+</div>

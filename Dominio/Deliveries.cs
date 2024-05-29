@@ -12,8 +12,7 @@ namespace Dominio
         private static int UltimoId { get; set; }
         public int Id { get; set; }
         public Position Position { get; set; }
-        public DateTime Date { get; set; }    
-        
+        public DateTime Date { get; set; }            
         public EmailDTO Email { get; set; }
 
         public Deliveries() 

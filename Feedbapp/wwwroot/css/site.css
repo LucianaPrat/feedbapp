@@ -20,3 +20,63 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+/* Estilos para la tabla */
+.table-custom {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 0 auto; /* Centrar la tabla horizontalmente */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra suave */
+}
+
+/* Estilos para el encabezado de la tabla */
+.table-custom th {
+    background-color: #387adf; /* Color de fondo */
+    color: #fff; /* Color de texto */
+    padding: 12px;
+    text-align: left;
+}
+
+/* Estilos para las celdas de la tabla */
+.table-custom td {
+    background-color: #fff; /* Color de fondo */
+    color: #333; /* Color de texto */
+    padding: 10px;
+}
+
+/* Estilos para las filas alternas */
+.table-custom tr:nth-child(even) {
+    background-color: #f5f5f5; /* Color de fondo alternativo */
+}
+
+/* Estilos para los botones personalizados */
+.btn-custom {
+    padding: 6px 12px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    color: #fff;
+    transition: background-color 0.3s ease;
+}
+
+.btn-primary {
+    background-color: #387adf; /* Color primario */
+}
+
+.btn-secondary {
+    background-color: #50c4ed; /* Color secundario */
+}
+
+.btn-tertiary {
+    background-color: #333a73; /* Color terciario */
+}
+
+.btn-quaternary {
+    background-color: #fba834; /* Color cuaternario */
+}
+
+.btn-custom:hover {
+    filter: brightness(90%); /* Reducir el brillo al pasar el mouse */
+}

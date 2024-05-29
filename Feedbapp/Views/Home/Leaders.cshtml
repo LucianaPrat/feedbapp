@@ -1,14 +1,17 @@
-﻿@model IEnumerable<Dominio.DTO.LeaderDTO>
-    
-<h1>Leaders</h1>
+﻿@model IEnumerable<Dominio.Leader>
+
+<div class="text-center" style="padding-top: 15px; padding-bottom: 10px;">
+    <h1 style="color: #333A73; font-weight: bold; font-size: 2.5rem; margin-bottom: 20px;">Leaders</h1>
+</div>
+
 @if (Model.Count() == 0)
 {
     <p>No existen lideres</p>
 }
 else
-{  
-    <div>
-        <table class="table table-bordered table-striped">
+{
+    <div class="table-responsive" style="padding-top: 20px; padding-bottom: 20px;">
+        <table class="table-custom">
             <thead>
                 <tr>
                     <th>Nombre y Apellido</th>     
@@ -27,8 +30,9 @@ else
                         <td>@l.Client.Name</td>
                          <td>@l.Active</td>
                         <td>
-                            @Html.ActionLink("Editar", "EditLeader", "Home", new { id = l.Id })
-                            @Html.ActionLink("Borrar", "DeleteLeader", "Home", new { id = l.Id })
+                            <a href="@Url.Action("EditLeader", "Home", new { id = l.Id })" class="btn-custom btn-primary">Editar</a>
+                            <a href="@Url.Action("DeleteLeader", "Home", new { id = l.Id })" class="btn-custom btn-secondary">Eliminar</a>
+    
                         </td>
                     </tr>
                 </tbody>
@@ -36,5 +40,7 @@ else
         </table>       
     </div>    
 }
-<a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="CreateLeader">Crear lider</a>
+<div class="text-center mt-3" style="padding-top: 20px; padding-bottom: 20px;">
+    <a href="@Url.Action("CreateLeader", "Home")" class="btn-custom btn-tertiary" style="padding: 10px 20px;">Crear cliente</a>
+</div>
 <p>@ViewBag.Mensaje</p>
