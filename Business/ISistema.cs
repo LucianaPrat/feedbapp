@@ -8,7 +8,7 @@ namespace Business
     public interface ISistema
     {
         List<ClientDTO> GetClients();
-        List<Developer> GetDevelopers();
+        List<DeveloperDTO> GetDevelopers();
         List<LeaderDTO> GetLeaders();
         List<Admin> GetAdmins();
         List<Position> GetPositions();
@@ -20,27 +20,27 @@ namespace Business
         void AddAdmin(Admin a);
 
         void CreateClient(ClientDTO c);
-        void CreateDeveloper(Developer dev);
+        void CreateDeveloper(DeveloperDTO dev);
 
         void CreatePosition(Position p);
         void CreateLeader(LeaderDTO l);
         void CreateDeliverie(Deliveries d);
-        Deliveries? SerchDeliveries(int id);
-        LeaderDTO? SerchLeaderId(int id);
-        Developer? SerchDeveloperId(int id);
+        Deliveries? SearchDeliveries(int id);
+        LeaderDTO? SearchLeaderId(int id);
+        DeveloperDTO? SearchDeveloperId(int id);
         ClientDTO? SearchClientId(int id);
 
         Position? SerchPositionId(int id);
 
         void EditClient(ClientDTO c);
-        void EditDeveloper(Developer d);
+        void EditDeveloper(DeveloperDTO d);
         void EditPosition(Position p);
         void EditLeader(LeaderDTO l);
 
         void DeleteClient(ClientDTO? cli);
 
         void DeleteLeader(LeaderDTO? li);
-        void DeleteDeveloper(Developer? dev);
+        void DeleteDeveloper(DeveloperDTO? dev);
         void DeletePosition(Position? p);
         Admin Login(String email, String password);
         void SendEmail(int positionId, EmailDTO e, EmailConfig emailConfig);

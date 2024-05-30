@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Dominio.Developer>
+﻿@model IEnumerable<Dominio.DTO.DeveloperDTO>
 
 <div class="text-center" style="padding-top: 15px; padding-bottom: 10px;">
     <h1 style="color: #333A73; font-weight: bold; font-size: 2.5rem; margin-bottom: 20px;">Developer</h1>
@@ -24,12 +24,12 @@ else
                 </tr>
             </thead>
             <tbody>
-                @foreach (Dominio.Developer d in Model)
+                @foreach (Dominio.DTO.DeveloperDTO d in Model)
                 {
                     <tr>
                         <td>@d.Name @d.LastName</td>
                         <td>@d.Email</td>
-                        <td>@d.Leader.Name @d.Leader.LastName</td>
+                        <td>@d.Leader?.Name @d.Leader?.LastName</td>
                         <td>@d.Active</td>
                         <td>                           
                             <a href="@Url.Action("EditDeveloper", "Home", new { id = d.Id })" class="btn-custom btn-primary">Editar</a>

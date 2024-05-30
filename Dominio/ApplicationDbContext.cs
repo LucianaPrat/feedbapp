@@ -38,5 +38,6 @@ namespace Dominio
         public DbSet<Client> Clients => Set<Client>();
         public DbSet<Email> Emails => Set<Email>();
         public DbSet<Leader> Leaders => Set<Leader>();
+        public DbSet<Developer> Developers => Set<Developer>();
     }
 }

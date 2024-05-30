@@ -7,6 +7,7 @@ using Dominio.Accessors.Email;
 using Dominio.DTO;
 using Dominio.Entity;
 using Feedbapp.Services;
+using Dominio.Accessors.Developers;
 
 namespace Business
 {
@@ -20,13 +21,19 @@ namespace Business
         private IEmailAccessor _emailAccesor;
         private IClientAccessor _clientAccesor;
         private ILeaderAccessor _leaderAccesor;
+        private IDeveloperAccessor _developerAccesor;
 
-        public Sistema(IEmailService emailService, IEmailAccessor emailAccesor, IClientAccessor clientAccesor, ILeaderAccessor leaderAccesor)
+        public Sistema(IEmailService emailService, 
+            IEmailAccessor emailAccesor, 
+            IClientAccessor clientAccesor,
+            ILeaderAccessor leaderAccesor,
+            IDeveloperAccessor developerAccesor)
         {
             _emailService = emailService;
             _emailAccesor = emailAccesor;
             _clientAccesor = clientAccesor;
             _leaderAccesor = leaderAccesor;
+            _developerAccesor = developerAccesor;
         }         
 
         #region Gets
@@ -45,18 +52,20 @@ namespace Business
             }
             return results;
         }
-        public List<Developer> GetDevelopers()
+        public List<DeveloperDTO> GetDevelopers()
         {
-            List<Developer> Developers = new List<Developer>();
-            foreach (var p in _persons)
+            List<DeveloperDTO> results = new List<DeveloperDTO>();
+
+            var developers = _developerAccesor.GetAll();
+
+            foreach (DeveloperDTO developer in developers)
             {
-                if (p is Developer)
+                if (developer.Removed == false)
                 {
-                    Developer d = (Developer)p;
-                    Developers.Add(d);
+                    results.Add(developer);
                 }
             }
-            return Developers;
+            return results;
         }
         public List<LeaderDTO> GetLeaders()
         {
@@ -183,60 +192,37 @@ namespace Business
             //}
 
         }
-        public void CreateDeveloper(Developer dev)
+        public void CreateDeveloper(DeveloperDTO dev)
         {
-            List<Developer> devs = GetDevelopers();
-            if (!devs.Contains(dev))
-            {
-                dev.IsValid();
-                LeaderDTO l = SearchLeaderId(dev.Leader.Id);
-                dev.Leader = l;
-                _persons.Add(dev);
-            }
-            else
-            {
-                throw new Exception("Ya existe este cliente");
-            }
+            _developerAccesor.Save(dev);
         }
 
         public void CreatePosition(Position p)
         {
-            if (!_positions.Contains(p))
-            {
-                Developer? d = SerchDeveloperId(p.Developer.Id);
-                p.Developer = d;
-                _positions.Add(p);
-            }
-            else
-            {
-                throw new Exception("Ya existe esta posicion");
-            }
-        }
-        public void CreateLeader(LeaderDTO l)
-        {
-            _leaderAccesor.Save(l);
-            // TODO
-            //if (!GetLeaders().Contains(l))
+            //if (!_positions.Contains(p))
             //{
-            //    ClientDTO c = SearchClientId(l.Client.Id);
-            //    l.Client = c;
-            //    _persons.Add(l);
+            //    Developer? d = SearchDeveloperId(p.Developer.Id);
+            //    p.Developer = d;
+            //    _positions.Add(p);
             //}
             //else
             //{
             //    throw new Exception("Ya existe esta posicion");
             //}
         }
-        public void CreateDeliverie(Deliveries d)
+        public void CreateLeader(LeaderDTO l)
         {
-            
-            _deliveries.Add(d);
-            
+            _leaderAccesor.Save(l);
         }
+        public void CreateDeliverie(Deliveries d)
+        {            
+            _deliveries.Add(d);            
+        }
+
         #endregion
 
         #region Serch
-        public Deliveries? SerchDeliveries(int id)
+        public Deliveries? SearchDeliveries(int id)
         {
             foreach (var d in _deliveries)
             {
@@ -247,7 +233,7 @@ namespace Business
             }
             return null;
         }
-        public LeaderDTO? SerchLeaderId(int id)
+        public LeaderDTO? SearchLeaderId(int id)
         {
             foreach (LeaderDTO l in GetLeaders())
             {
@@ -257,53 +243,15 @@ namespace Business
                 }
             }
             return null;
-        }
-        public Developer? SerchDeveloperId(int id)
+        } 
+        public DeveloperDTO? SearchDeveloperId(int id)
         {
-            foreach (var d in _persons)
-            {
-                if (d.Id == id && d is Developer)
-                {
-                    return (Developer)d;
-                }
-            }
-            return null;
+            return _developerAccesor.GetById(id); 
         }
         public ClientDTO? SearchClientId(int id)
         {
-            return _clientAccesor.GetById(id);
-
-            //foreach (var c in _clients)
-            //{
-            //    if (c.Id == id)
-            //    {
-            //        return c;
-            //    }
-            //}
-            //return null;
-        }
-        private LeaderDTO? SearchLeaderId(int leaderID)
-        {
-            foreach (LeaderDTO l in GetLeaders())
-            {
-                if (l.Id == leaderID)
-                {
-                    return l;
-                }
-            }
-            return null;
-        }
-        private Developer SearchDeveloperId(int id)
-        {
-            foreach (Developer p in GetDevelopers())
-            {
-                if (p.Id == id)
-                {
-                    return p;
-                }
-            }
-            return null;
-        }
+            return _clientAccesor.GetById(id); 
+        } 
         public Position? SerchPositionId(int id)
         {
             foreach (Position p in _positions)
@@ -323,33 +271,22 @@ namespace Business
         {
             _clientAccesor.Update(c);
         }
-        public void EditDeveloper(Developer d)
+        public void EditDeveloper(DeveloperDTO d)
         {
-            foreach (Developer dev in GetDevelopers())
-            {
-                if (dev.Id == d.Id)
-                {
-                    LeaderDTO l = SearchLeaderId(d.Leader.Id);
-                    dev.Name = d.Name;
-                    dev.LastName = d.LastName;
-                    dev.Email = d.Email;
-                    dev.Leader = l;
-                    dev.Active = d.Active;
-                }
-            }
+            _developerAccesor.Update(d);
         }
         public void EditPosition(Position p)
         {
-            foreach (Position po in _positions)
-            {
-                if (po.Id == p.Id)
-                {
-                    Developer dev = SearchDeveloperId(p.Developer.Id);
-                    po.Developer = dev;
-                    po.Recurrence = p.Recurrence;
-                    po.Description = p.Description;
-                }
-            }
+            //foreach (Position po in _positions)
+            //{
+            //    if (po.Id == p.Id)
+            //    {
+            //        DeveloperDTO dev = SearchDeveloperId(p.Developer.Id);
+            //        po.Developer = dev;
+            //        po.Recurrence = p.Recurrence;
+            //        po.Description = p.Description;
+            //    }
+            //}
         }
         public void EditLeader(LeaderDTO l)
         {
@@ -368,15 +305,9 @@ namespace Business
             _leaderAccesor.Delete(l);
         }
 
-        public void DeleteDeveloper(Developer? dev)
+        public void DeleteDeveloper(DeveloperDTO? dev)
         {
-            foreach (var d in _persons)
-            {
-                if (d == dev)
-                {
-                   d.Delete();
-                }
-            }
+            _developerAccesor.Delete(dev);
         }
         public void DeletePosition(Position? p)
         {

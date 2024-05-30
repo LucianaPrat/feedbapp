@@ -82,6 +82,11 @@ namespace Dominio.Accessors.Leaders
 
         public static LeaderDTO ConvertToDTO(Leader leader)
         {
+            if (leader == null)
+            {
+                throw new ArgumentNullException("leader");
+            }
+
             return new LeaderDTO
             {
                 Id = leader.Id,
@@ -90,13 +95,18 @@ namespace Dominio.Accessors.Leaders
                 LastName = leader.LastName,
                 Email = leader.Email,
                 ClientId = leader.ClientId,
-                Client = ClientAccessor.ConvertToDTO(leader.Client),
+                Client = leader.Client!=null? ClientAccessor.ConvertToDTO(leader.Client):null,
                 Removed = leader.Removed
             };
         }
 
         public static Leader ConvertToEntity(LeaderDTO leader)
         {
+            if (leader == null)
+            {
+                throw new ArgumentNullException("leader");
+            }
+
             return new Leader
             {
                 Id = leader.Id,

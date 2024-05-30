@@ -1,4 +1,4 @@
-﻿@model Dominio.Developer
+﻿@model Dominio.DTO.DeveloperDTO
 
 @{
     ViewData["Title"] = "CreateDeveloper";
@@ -24,7 +24,7 @@
             </div>
             <div class="form-group">
                 <label for="exampleSelect">Lideres</label>
-                <select asp-for="Leader.Id" class="form-control" id="exampleSelect">
+                <select asp-for="LeaderId" class="form-control" id="exampleSelect">
                     @foreach (Dominio.DTO.LeaderDTO d in ViewBag.leaders)
                     {
                         <option value="@d.Id">@d.Name @d.LastName</option>

@@ -76,6 +76,11 @@ namespace Dominio.Accessors.Clients
 
      public static   ClientDTO ConvertToDTO(Client client)
         {
+            if (client == null)
+            {
+                throw new ArgumentNullException("client");
+            }
+
             return new ClientDTO
             {
                 Id = client.Id,
@@ -87,6 +92,11 @@ namespace Dominio.Accessors.Clients
 
         public static Client ConvertToEntity(ClientDTO client)
         {
+            if (client == null)
+            {
+                throw new ArgumentNullException("client");
+            }
+
             return new Entity.Client
             {
                 Id = client.Id,

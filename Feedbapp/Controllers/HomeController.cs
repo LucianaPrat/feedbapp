@@ -75,7 +75,7 @@ namespace Feedbapp.Controllers
 
         [HttpPost]
 
-        public IActionResult CreateDeveloper(Developer d)
+        public IActionResult CreateDeveloper(DeveloperDTO d)
         {
             ViewBag.leaders = _sistema.GetLeaders();
             try
@@ -139,26 +139,27 @@ namespace Feedbapp.Controllers
         #region Edits
         public IActionResult EditDeveloper(int id)
         {
-            ViewBag.leaders = _sistema.GetLeaders();
-            Developer? search = _sistema.SerchDeveloperId(id);
+            ViewBag.Leaders = _sistema.GetLeaders();
+            DeveloperDTO? search = _sistema.SearchDeveloperId(id);
             return View(search);
         }
+
         [HttpPost]
-        public IActionResult EditDeveloper(Developer d)
+        public IActionResult EditDeveloper(DeveloperDTO d)
         {
-            ViewBag.leaders = _sistema.GetLeaders();
+            ViewBag.Leaders = _sistema.GetLeaders();
             _sistema.EditDeveloper(d);
             return View();
         }
         public IActionResult EditDeliveries(int id)
         {
-            ViewBag.leaders = _sistema.GetLeaders();
+            ViewBag.Leaders = _sistema.GetLeaders();
             ViewBag.developers = _sistema.GetDevelopers();
-            Developer? serch = _sistema.SerchDeveloperId(id);
+            DeveloperDTO? serch = _sistema.SearchDeveloperId(id);
             return View(serch);
         }
         [HttpPost]
-        public IActionResult EditDeliveries(Developer d)
+        public IActionResult EditDeliveries(DeveloperDTO d)
         {
             ViewBag.leaders = _sistema.GetLeaders();
             ViewBag.developers = _sistema.GetDevelopers();
@@ -193,7 +194,7 @@ namespace Feedbapp.Controllers
         public IActionResult EditLeader(int id)
         {
             ViewBag.clients = _sistema.GetClients();
-            LeaderDTO? serch = _sistema.SerchLeaderId(id);
+            LeaderDTO? serch = _sistema.SearchLeaderId(id);
             return View(serch);
         }
         [HttpPost]
@@ -224,7 +225,7 @@ namespace Feedbapp.Controllers
         {
             try
             {
-                LeaderDTO? serch = _sistema.SerchLeaderId(id);
+                LeaderDTO? serch = _sistema.SearchLeaderId(id);
                 _sistema.DeleteLeader(serch);
             }
             catch (Exception e)
@@ -238,8 +239,8 @@ namespace Feedbapp.Controllers
         {
             try
             {
-                Developer? serch = _sistema.SerchDeveloperId(id);
-                _sistema.DeleteDeveloper(serch);
+                DeveloperDTO? dev = _sistema.SearchDeveloperId(id);
+                _sistema.DeleteDeveloper(dev);
             }
             catch (Exception e)
             {
