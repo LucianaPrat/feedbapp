@@ -81,7 +81,7 @@ namespace Feedbapp.Controllers
             {
                 _sistema.CreateDeveloper(d);
                 ViewBag.Message = "Creado correctamente";
-                RedirectToAction("Developers");
+                return RedirectToAction("Developers");
             }
             catch (Exception e){
                 ViewBag.Message = e.Message;
@@ -131,7 +131,6 @@ namespace Feedbapp.Controllers
             {
                 ViewBag.mensaje = e.Message;
             }
-
             return RedirectToAction("Leaders");
         }
         #endregion
@@ -148,7 +147,7 @@ namespace Feedbapp.Controllers
         {
             ViewBag.leaders = _sistema.GetLeaders();
             _sistema.EditDeveloper(d);
-            return View();
+            return RedirectToAction("Developers"); ;
         }
         public IActionResult EditDeliveries(int id)
         {
@@ -188,7 +187,7 @@ namespace Feedbapp.Controllers
         public IActionResult EditClient(ClientDTO c)
         {
             _sistema.EditClient(c);
-            return View();
+            return RedirectToAction("Clients");
         }
         public IActionResult EditLeader(int id)
         {
@@ -201,7 +200,7 @@ namespace Feedbapp.Controllers
         {
             ViewBag.clients = _sistema.GetClients();
             _sistema.EditLeader(l);
-            return View();
+            return RedirectToAction("Leaders");
         }
         #endregion
 

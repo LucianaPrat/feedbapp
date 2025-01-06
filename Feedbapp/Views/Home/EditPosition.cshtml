@@ -4,7 +4,7 @@
     ViewData["Title"] = "EditPosition";
 }
 
-<h1>Editar posicion</h1>
+<h1>Edit posicion</h1>
 
 <hr />
 <div class="row">
@@ -21,7 +21,7 @@
                 </select>
             </div>                        
             <div class="form-group">
-                <label asp-for="Recurrence">Recurencia</label>
+                <label asp-for="Recurrence">Recurrence</label>
                 <select asp-for="Recurrence" class="form-control" id="exampleSelect">
                     @foreach (Dominio.Recurrence recurrenceOption in Enum.GetValues(typeof(Dominio.Recurrence)))
                     {
@@ -30,7 +30,7 @@
                 </select>
             </div>
             <div class="form-group">
-                <label asp-for="Description" class="control-label">Descripcion</label>
+                <label asp-for="Description" class="control-label">Description</label>
                 <input asp-for="Description" class="form-control" />
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>

@@ -7,7 +7,7 @@
 @if (Model.Count() == 0)
 {
     <div style="text-align: center;">
-        <p>No existen developers</p>
+        <p>No developers exist</p>
     </div>
 }
 else
@@ -16,10 +16,10 @@ else
         <table class="table-custom">
             <thead>
                 <tr>
-                    <th>Nombre y Apellido</th>
+                    <th>Full name</th>
                     <th>Email</th>
-                    <th>Lider</th>
-                    <th>Activo</th>
+                    <th>Leader</th>
+                    <th>Active</th>
                     <th></th>
                 </tr>
             </thead>
@@ -32,8 +32,8 @@ else
                         <td>@d.Leader.Name @d.Leader.LastName</td>
                         <td>@d.Active</td>
                         <td>                           
-                            <a href="@Url.Action("EditDeveloper", "Home", new { id = d.Id })" class="btn-custom btn-primary">Editar</a>
-                            <a href="@Url.Action("DeleteDeveloper", "Home", new { id = d.Id })" class="btn-custom btn-secondary">Eliminar</a>
+                            <a href="@Url.Action("EditDeveloper", "Home", new { id = d.Id })" class="btn-custom btn-primary">Edit</a>
+                            <a href="@Url.Action("DeleteDeveloper", "Home", new { id = d.Id })" class="btn-custom btn-secondary">Delete</a>
                         </td>
                     </tr>
                 }
@@ -42,5 +42,5 @@ else
     </div>
 }
 <div class="text-center mt-3" style="padding-top: 20px; padding-bottom: 20px;">
-    <a href="@Url.Action("CreateDeveloper", "Home")" class="btn-custom btn-tertiary" style="padding: 10px 20px;">Crear cliente</a>
+    <a href="@Url.Action("CreateDeveloper", "Home")" class="btn-custom btn-tertiary" style="padding: 10px 20px;">Create developer</a>
 </div>

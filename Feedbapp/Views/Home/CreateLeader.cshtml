@@ -4,7 +4,7 @@
     ViewData["Title"] = "CreateLeader";
 }
 
-<h1>Crear Lider</h1>
+<h1>Create Leader</h1>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -26,7 +26,7 @@
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label for="exampleSelect">Clientes</label>
+                <label for="exampleSelect">Clients</label>
                 <select asp-for="Client.Id" class="form-control" id="exampleSelect">
                     @foreach (Dominio.DTO.ClientDTO c in ViewBag.clients)
                     {
@@ -36,7 +36,7 @@
             </div>            
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
-                <a asp-action="Leaders">Volver</a>
+                <a asp-action="Leaders">Back to list</a>
             </div>
         </form>
     </div>

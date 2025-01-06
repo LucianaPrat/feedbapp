@@ -1,16 +1,16 @@
 ﻿@model IEnumerable<Dominio.DTO.ClientDTO>
 
 <div class="text-center" style="padding-top: 15px; padding-bottom: 10px;">
-    <h1 style="color: #333A73; font-weight: bold; font-size: 2.5rem; margin-bottom: 20px;">Clientes</h1>
+    <h1 style="color: #333A73; font-weight: bold; font-size: 2.5rem; margin-bottom: 20px;">Clients</h1>
 </div>
 
 <div class="table-responsive" style="padding-top: 20px; padding-bottom: 20px;">
     <table class="table-custom">
         <thead>
             <tr>
-                <th>Nombre</th>
-                <th>Activo</th>
-                <th>Acciones</th>
+                <th>Name</th>
+                <th>Active</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -20,8 +20,8 @@
                     <td>@c.Name</td>
                     <td>@c.Active</td>
                     <td>
-                        <a href="@Url.Action("EditClient", "Home", new { id = c.Id })" class="btn-custom btn-primary">Editar</a>
-                        <a href="@Url.Action("DeleteClient", "Home", new { id = c.Id })" class="btn-custom btn-secondary">Eliminar</a>
+                        <a href="@Url.Action("EditClient", "Home", new { id = c.Id })" class="btn-custom btn-primary">Edit</a>
+                        <a href="@Url.Action("DeleteClient", "Home", new { id = c.Id })" class="btn-custom btn-secondary">Delete</a>
                     </td>
                 </tr>
             }
@@ -31,7 +31,7 @@
 
 
 <div class="text-center mt-3" style="padding-top: 20px; padding-bottom: 20px;">
-    <a href="@Url.Action("CreateClient", "Home")" class="btn-custom btn-tertiary" style="padding: 10px 20px;">Crear cliente</a>
+    <a href="@Url.Action("CreateClient", "Home")" class="btn-custom btn-tertiary" style="padding: 10px 20px;">Create client</a>
 </div>
 
 @if (!string.IsNullOrEmpty(ViewBag.Mensaje))

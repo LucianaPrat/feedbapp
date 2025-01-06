@@ -4,7 +4,7 @@
     ViewData["Title"] = "EditLeader";
 }
 
-<h1>Editar Lider</h1>
+<h1>Edit Leader</h1>
 
 <hr />
 <div class="row">
@@ -27,7 +27,7 @@
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label for="exampleSelect">Clientes</label>
+                <label for="exampleSelect">Clients</label>
                 <select asp-for="Client.Id" class="form-control" id="exampleSelect">
                     @foreach (Dominio.DTO.ClientDTO c in ViewBag.clients)
                     {
@@ -41,7 +41,7 @@
                 </label>
             </div>
             <div class="form-group">
-                <input type="submit" value="Cambiar" class="btn btn-primary" />
+                <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
     </div>

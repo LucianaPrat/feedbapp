@@ -4,19 +4,19 @@
     ViewData["Title"] = "EditDeveloper";
 }
 
-<h1>Editar Developer</h1>
+<h1>Edit Developer</h1>
 
 <div class="row">
     <div class="col-md-4">
         <form asp-action="EditDeveloper">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Name" class="control-label">Nombre</label>
+                <label asp-for="Name" class="control-label">Name</label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="LastName" class="control-label">Apellido</label>
+                <label asp-for="LastName" class="control-label">Last Name</label>
                 <input asp-for="LastName" class="form-control" />
                 <span asp-validation-for="LastName" class="text-danger"></span>
             </div>
@@ -26,7 +26,7 @@
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label for="Leader.Id">Lideres</label>
+                <label for="Leader.Id">Leaders</label>
                 <select asp-for="Leader.Id" class="form-control" id="exampleSelect">
                     @foreach (Dominio.Leader d in ViewBag.leaders)
                     {
@@ -38,15 +38,15 @@
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox" asp-for="Active">
                     <label class="form-check-label" for="miCheckbox">
-                        Activo
+                        Active
                     </label>
                 </div>
             </div>
             <div class="form-group">
-                <input type="submit" value="Guardar" class="btn btn-primary" />
+                <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
-        <p>@ViewBag.mensaje</p>
+        <p>@ViewBag.message</p>
     </div>
 </div>
 
