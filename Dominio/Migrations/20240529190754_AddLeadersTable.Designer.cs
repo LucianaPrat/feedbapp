@@ -3,6 +3,7 @@ using Dominio;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Dominio.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240529190754_AddLeadersTable")]
+    partial class AddLeadersTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -59,42 +62,6 @@ namespace Dominio.Migrations
                             Name = "YouTube",
                             Removed = false
                         });
-                });
-
-            modelBuilder.Entity("Dominio.Entity.Developer", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<bool>("Active")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("LeaderId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("Removed")
-                        .HasColumnType("bit");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LeaderId");
-
-                    b.ToTable("Developers");
                 });
 
             modelBuilder.Entity("Dominio.Entity.Email", b =>
@@ -159,17 +126,6 @@ namespace Dominio.Migrations
                     b.HasIndex("ClientId");
 
                     b.ToTable("Leaders");
-                });
-
-            modelBuilder.Entity("Dominio.Entity.Developer", b =>
-                {
-                    b.HasOne("Dominio.Entity.Leader", "Leader")
-                        .WithMany()
-                        .HasForeignKey("LeaderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Leader");
                 });
 
             modelBuilder.Entity("Dominio.Entity.Leader", b =>

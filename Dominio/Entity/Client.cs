@@ -9,8 +9,10 @@ namespace Dominio.Entity
     public class Client
     {
         public int Id { get; set; }
-        public string Name { get; set; } = null!;
+        public string Name { get; set; }
         public bool Active { get; set; }
         public bool Removed { get; set; }
-    }
+        
+        public ICollection<Leader> Leaders { get; set; }
+    } 
 }

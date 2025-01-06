@@ -1,8 +1,8 @@
 ﻿using Dominio.DTO;
 
-namespace Dominio.Accessors.Client
+namespace Dominio.Accessors.Leaders
 {
-    public interface IClientAccessor : IAccessor<ClientDTO>
+    public interface ILeaderAccessor : IAccessor<LeaderDTO>
     {
         //bool Exist(int id);
         //List<ClientDTO> GetAll();

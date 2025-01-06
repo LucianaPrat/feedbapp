@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualBasic.FileIO;
+﻿using Dominio.Entity;
+using Microsoft.VisualBasic.FileIO;
 using System;
 using System.Collections.Generic;
 using System.Linq;

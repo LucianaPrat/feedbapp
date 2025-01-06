@@ -17,10 +17,12 @@ namespace Dominio.DTO
         public bool Removed { get; set; }
         public PersonDTO()
         {
+            Active = true;
         }
 
         public PersonDTO(string name, string lastName, string email)
         {
+            Active = true;
             Name = name;
             LastName = lastName;
             Email = email;

@@ -1,10 +1,12 @@
 using Business;
 using Dominio;
-using Dominio.Accessors.Client;
+using Dominio.Accessors.Clients;
+using Dominio.Accessors.Leaders;
 using Dominio.Accessors.Email;
 using Dominio.DTO;
 using Feedbapp.Services;
 using Microsoft.EntityFrameworkCore;
+using Dominio.Accessors.Developers;
 
 namespace Feedbapp
 {
@@ -18,11 +20,13 @@ namespace Feedbapp
             // Add services to the container.
             builder.Services.AddControllersWithViews();
             builder.Services.AddSession();
-            builder.Services.AddScoped<IEmailService, EmailService>();
             builder.Services.AddScoped<ISistema, Sistema>();
-            builder.Services.AddScoped<IClientAccessor, ClientAccessor>();
+            builder.Services.AddScoped<IEmailService, EmailService>();
             builder.Services.AddScoped<IEmailAccessor, EmailAccessor>();
-            builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer("name=DefultConnection"));
+            builder.Services.AddScoped<IClientAccessor, ClientAccessor>();
+            builder.Services.AddScoped<ILeaderAccessor, LeaderAccessor>();
+            builder.Services.AddScoped<IDeveloperAccessor, DeveloperAccessor>();
+            builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer("name=DefaultConnection"));
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

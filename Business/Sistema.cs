@@ -1,10 +1,13 @@
 ﻿using Business.Models;
 using Dominio;
-using Dominio.Accessors.Client;
+using Dominio.Accessors.Clients;
+using Dominio.Accessors.Leaders;
+using Dominio.Accessors.Clients;
 using Dominio.Accessors.Email;
 using Dominio.DTO;
 using Dominio.Entity;
 using Feedbapp.Services;
+using Dominio.Accessors.Developers;
 
 namespace Business
 {
@@ -15,15 +18,22 @@ namespace Business
         private static List<Deliveries> _deliveries { get; set; } = new List<Deliveries>();
 
         private IEmailService _emailService;
-        private IClientAccessor _clientAccesor;
         private IEmailAccessor _emailAccesor;
+        private IClientAccessor _clientAccesor;
+        private ILeaderAccessor _leaderAccesor;
+        private IDeveloperAccessor _developerAccesor;
 
-        public Sistema(IEmailService emailService, IClientAccessor clientAccesor, IEmailAccessor emailAccesor)
+        public Sistema(IEmailService emailService, 
+            IEmailAccessor emailAccesor, 
+            IClientAccessor clientAccesor,
+            ILeaderAccessor leaderAccesor,
+            IDeveloperAccessor developerAccesor)
         {
             _emailService = emailService;
-            _clientAccesor = clientAccesor;
             _emailAccesor = emailAccesor;
-            Precarga();
+            _clientAccesor = clientAccesor;
+            _leaderAccesor = leaderAccesor;
+            _developerAccesor = developerAccesor;
         }         
 
         #region Gets
@@ -42,32 +52,37 @@ namespace Business
             }
             return results;
         }
-        public List<Developer> GetDevelopers()
+        public List<DeveloperDTO> GetDevelopers()
         {
-            List<Developer> Developers = new List<Developer>();
-            foreach (var p in _persons)
+            List<DeveloperDTO> results = new List<DeveloperDTO>();
+
+            var developers = _developerAccesor.GetAll();
+
+            foreach (DeveloperDTO developer in developers)
             {
-                if (p is Developer)
+                if (developer.Removed == false)
                 {
-                    Developer d = (Developer)p;
-                    Developers.Add(d);
+                    results.Add(developer);
                 }
             }
-            return Developers;
+            return results;
         }
-        public List<Leader> GetLeaders()
+        public List<LeaderDTO> GetLeaders()
         {
-            List<Leader> leaders = new List<Leader>();
-            foreach (var p in _persons)
+            List<LeaderDTO> results = new List<LeaderDTO>();
+
+            var leaders = _leaderAccesor.GetAll();
+
+            foreach (LeaderDTO leader in leaders)
             {
-                if (p is Leader && p.Removed == false)
+                if (leader.Removed == false)
                 {
-                    Leader d = (Leader)p;
-                    leaders.Add(d);
+                    results.Add(leader);
                 }
             }
-            return leaders;
+            return results;
         }
+
         public List<Admin> GetAdmins()
         {
             List<Admin> admins = new List<Admin>();
@@ -142,21 +157,21 @@ namespace Business
             ClientDTO client1 = SearchClientId(1);
             ClientDTO client2 = SearchClientId(1);
 
-            Leader leader1 = new Leader("Daniel", "Frascarelli", "lucianaprates10@gmail.com", client1);
-            Leader leader2 = new Leader("Angela", "Diaz", "angela@gmail.com", client2);
-            Developer developer1 = new Developer("Luciana", "Prates", "lu@gmail.com", leader1);
-            Developer developer2 = new Developer("Martina", "Perez", "martina@gmail.com", leader2);
+            //Leader leader1 = new Leader("Daniel", "Frascarelli", "lucianaprates10@gmail.com", client1);
+            //Leader leader2 = new Leader("Angela", "Diaz", "angela@gmail.com", client2);
+            //Developer developer1 = new Developer("Luciana", "Prates", "lu@gmail.com", leader1);
+            //Developer developer2 = new Developer("Martina", "Perez", "martina@gmail.com", leader2);
 
-            AddPerson(leader1);
-            AddPerson(leader2);
-            AddPerson(developer1);
-            AddPerson(developer2);
+            //AddPerson(leader1);
+            //AddPerson(leader2);
+            //AddPerson(developer1);
+            //AddPerson(developer2);
 
-            Position position1 = new Position(Recurrence.OtherWeek, "Hola", developer1);
-            Position position2 = new Position(Recurrence.Weekly, "Chau", developer2);
+            //Position position1 = new Position(Recurrence.OtherWeek, "Hola", developer1);
+            //Position position2 = new Position(Recurrence.Weekly, "Chau", developer2);
 
-            AddPosition(position1);
-            AddPosition(position2);
+            //AddPosition(position1);
+            //AddPosition(position2);
 
         }
         #endregion
@@ -177,58 +192,37 @@ namespace Business
             //}
 
         }
-        public void CreateDeveloper(Developer dev)
+        public void CreateDeveloper(DeveloperDTO dev)
         {
-            List<Developer> devs = GetDevelopers();
-            if (!devs.Contains(dev))
-            {
-                dev.IsValid();
-                Leader l = SearchLeaderId(dev.Leader.Id);
-                dev.Leader = l;
-                _persons.Add(dev);
-            }
-            else
-            {
-                throw new Exception("Ya existe este cliente");
-            }
+            _developerAccesor.Save(dev);
         }
 
         public void CreatePosition(Position p)
         {
-            if (!_positions.Contains(p))
-            {
-                Developer? d = SerchDeveloperId(p.Developer.Id);
-                p.Developer = d;
-                _positions.Add(p);
-            }
-            else
-            {
-                throw new Exception("Ya existe esta posicion");
-            }
+            //if (!_positions.Contains(p))
+            //{
+            //    Developer? d = SearchDeveloperId(p.Developer.Id);
+            //    p.Developer = d;
+            //    _positions.Add(p);
+            //}
+            //else
+            //{
+            //    throw new Exception("Ya existe esta posicion");
+            //}
         }
-        public void CreateLeader(Leader l)
+        public void CreateLeader(LeaderDTO l)
         {
-            if (!GetLeaders().Contains(l))
-            {
-                ClientDTO c = SearchClientId(l.Client.Id);
-                l.Client = c;
-                _persons.Add(l);
-            }
-            else
-            {
-                throw new Exception("Ya existe esta posicion");
-            }
+            _leaderAccesor.Save(l);
         }
         public void CreateDeliverie(Deliveries d)
-        {
-            
-            _deliveries.Add(d);
-            
+        {            
+            _deliveries.Add(d);            
         }
+
         #endregion
 
         #region Serch
-        public Deliveries? SerchDeliveries(int id)
+        public Deliveries? SearchDeliveries(int id)
         {
             foreach (var d in _deliveries)
             {
@@ -239,9 +233,9 @@ namespace Business
             }
             return null;
         }
-        public Leader? SerchLeaderId(int id)
+        public LeaderDTO? SearchLeaderId(int id)
         {
-            foreach (Leader l in GetLeaders())
+            foreach (LeaderDTO l in GetLeaders())
             {
                 if (l.Id == id)
                 {
@@ -249,53 +243,15 @@ namespace Business
                 }
             }
             return null;
-        }
-        public Developer? SerchDeveloperId(int id)
+        } 
+        public DeveloperDTO? SearchDeveloperId(int id)
         {
-            foreach (var d in _persons)
-            {
-                if (d.Id == id && d is Developer)
-                {
-                    return (Developer)d;
-                }
-            }
-            return null;
+            return _developerAccesor.GetById(id); 
         }
         public ClientDTO? SearchClientId(int id)
         {
-            return _clientAccesor.GetById(id);
-
-            //foreach (var c in _clients)
-            //{
-            //    if (c.Id == id)
-            //    {
-            //        return c;
-            //    }
-            //}
-            //return null;
-        }
-        private Leader? SearchLeaderId(int leaderID)
-        {
-            foreach (Leader l in GetLeaders())
-            {
-                if (l.Id == leaderID)
-                {
-                    return l;
-                }
-            }
-            return null;
-        }
-        private Developer SearchDeveloperId(int id)
-        {
-            foreach (Developer p in GetDevelopers())
-            {
-                if (p.Id == id)
-                {
-                    return p;
-                }
-            }
-            return null;
-        }
+            return _clientAccesor.GetById(id); 
+        } 
         public Position? SerchPositionId(int id)
         {
             foreach (Position p in _positions)
@@ -314,91 +270,44 @@ namespace Business
         public void EditClient(ClientDTO c)
         {
             _clientAccesor.Update(c);
-
-            //foreach (ClientDTO cli in _clients)
-            //{
-            //    if (cli.Id == c.Id)
-            //    {
-            //        cli.Name = c.Name;
-            //        cli.Active = c.Active;
-            //    }
-            //}
         }
-        public void EditDeveloper(Developer d)
+        public void EditDeveloper(DeveloperDTO d)
         {
-            foreach (Developer dev in GetDevelopers())
-            {
-                if (dev.Id == d.Id)
-                {
-                    Leader l = SearchLeaderId(d.Leader.Id);
-                    dev.Name = d.Name;
-                    dev.LastName = d.LastName;
-                    dev.Email = d.Email;
-                    dev.Leader = l;
-                    dev.Active = d.Active;
-                }
-            }
+            _developerAccesor.Update(d);
         }
         public void EditPosition(Position p)
         {
-            foreach (Position po in _positions)
-            {
-                if (po.Id == p.Id)
-                {
-                    Developer dev = SearchDeveloperId(p.Developer.Id);
-                    po.Developer = dev;
-                    po.Recurrence = p.Recurrence;
-                    po.Description = p.Description;
-                }
-            }
+            //foreach (Position po in _positions)
+            //{
+            //    if (po.Id == p.Id)
+            //    {
+            //        DeveloperDTO dev = SearchDeveloperId(p.Developer.Id);
+            //        po.Developer = dev;
+            //        po.Recurrence = p.Recurrence;
+            //        po.Description = p.Description;
+            //    }
+            //}
         }
-        public void EditLeader(Leader l)
+        public void EditLeader(LeaderDTO l)
         {
-            foreach (Leader le in GetLeaders())
-            {
-                if (l.Id == le.Id)
-                {
-                    ClientDTO? c = SearchClientId(l.Client.Id);
-                    le.Name = l.Name;
-                    le.LastName = l.LastName;
-                    le.Client = c;
-                }
-            }
+            _leaderAccesor.Update(l);
         }
         #endregion
 
         #region Deletes
-        public void DeleteClient(ClientDTO? cli)
+        public void DeleteClient(ClientDTO c)
         {
-            _clientAccesor.Delete(cli);
-            //foreach (ClientDTO c in _clients)
-            //{
-            //    if (c == cli)
-            //    {
-            //        c.Delete();
-            //    }
-            //}
+            _clientAccesor.Delete(c);
         }
 
-        public void DeleteLeader(Leader? li)
+        public void DeleteLeader(LeaderDTO l)
         {
-            foreach (var l in _persons)
-            {
-                if (l == li)
-                {
-                    l.Delete();
-                }
-            }
+            _leaderAccesor.Delete(l);
         }
-        public void DeleteDeveloper(Developer? dev)
+
+        public void DeleteDeveloper(DeveloperDTO? dev)
         {
-            foreach (var d in _persons)
-            {
-                if (d == dev)
-                {
-                   d.Delete();
-                }
-            }
+            _developerAccesor.Delete(dev);
         }
         public void DeletePosition(Position? p)
         {

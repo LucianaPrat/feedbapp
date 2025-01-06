@@ -1,7 +1,7 @@
 ﻿using Dominio.DTO;
 using Dominio.Entity;
 
-namespace Dominio.Accessors.Client
+namespace Dominio.Accessors.Clients
 {
     public class ClientAccessor : IClientAccessor
     {
@@ -74,8 +74,13 @@ namespace Dominio.Accessors.Client
             _context.SaveChanges();
         }
 
-        ClientDTO ConvertToDTO(Entity.Client client)
+     public static   ClientDTO ConvertToDTO(Client client)
         {
+            if (client == null)
+            {
+                throw new ArgumentNullException("client");
+            }
+
             return new ClientDTO
             {
                 Id = client.Id,
@@ -85,8 +90,13 @@ namespace Dominio.Accessors.Client
             };
         }
 
-        Entity.Client ConvertToEntity(ClientDTO client)
+        public static Client ConvertToEntity(ClientDTO client)
         {
+            if (client == null)
+            {
+                throw new ArgumentNullException("client");
+            }
+
             return new Entity.Client
             {
                 Id = client.Id,
