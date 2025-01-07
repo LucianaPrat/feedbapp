@@ -10,14 +10,14 @@ namespace Business
         List<ClientDTO> GetClients();
         List<DeveloperDTO> GetDevelopers();
         List<LeaderDTO> GetLeaders();
-        List<Admin> GetAdmins();
+        List<AdminDTO> GetAdmins();
         List<Position> GetPositions();
         List<Deliveries> GetDeliveries();
         //void AddClient(ClientDTO clientDTO);
         void AddPerson(PersonDTO p);
         void AddPosition(Position p);
         void AddDeliveries(Deliveries d);
-        void AddAdmin(Admin a);
+        void AddAdmin(AdminDTO a);
 
         void CreateClient(ClientDTO c);
         void CreateDeveloper(DeveloperDTO dev);
@@ -42,7 +42,7 @@ namespace Business
         void DeleteLeader(LeaderDTO? li);
         void DeleteDeveloper(DeveloperDTO? dev);
         void DeletePosition(Position? p);
-        Admin Login(String email, String password);
+        AdminDTO Login(String email, String password);
         void SendEmail(int positionId, EmailDTO e, EmailConfig emailConfig);
     }
 }

@@ -7,6 +7,7 @@ using Dominio.DTO;
 using Feedbapp.Services;
 using Microsoft.EntityFrameworkCore;
 using Dominio.Accessors.Developers;
+using Dominio.Accessors.Admins;
 
 namespace Feedbapp
 {
@@ -24,6 +25,7 @@ namespace Feedbapp
             builder.Services.AddScoped<IEmailService, EmailService>();
             builder.Services.AddScoped<IEmailAccessor, EmailAccessor>();
             builder.Services.AddScoped<IClientAccessor, ClientAccessor>();
+            builder.Services.AddScoped<IAdminAccessor, AdminAccessor>();
             builder.Services.AddScoped<ILeaderAccessor, LeaderAccessor>();
             builder.Services.AddScoped<IDeveloperAccessor, DeveloperAccessor>();
             builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer("name=DefaultConnection"));

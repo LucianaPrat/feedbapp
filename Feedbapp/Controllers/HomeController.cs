@@ -274,7 +274,7 @@ namespace Feedbapp.Controllers
         {
             try
             {   
-                Admin? a = _sistema.Login(Email, Password);
+                AdminDTO? a = _sistema.Login(Email, Password);
                 if (a != null)
                 {//guarda su id y su rol
                     HttpContext.Session.SetInt32("LoggedId", a.Id);
@@ -315,7 +315,7 @@ namespace Feedbapp.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult SingIn(Admin a)
+        public IActionResult SingIn(AdminDTO a)
         {
             try
             {                

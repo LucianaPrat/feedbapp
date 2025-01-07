@@ -8,6 +8,7 @@ using Dominio.DTO;
 using Dominio.Entity;
 using Feedbapp.Services;
 using Dominio.Accessors.Developers;
+using Dominio.Accessors.Admins;
 
 namespace Business
 {
@@ -20,18 +21,21 @@ namespace Business
         private IEmailService _emailService;
         private IEmailAccessor _emailAccesor;
         private IClientAccessor _clientAccesor;
+        private IAdminAccessor _adminAccesor;
         private ILeaderAccessor _leaderAccesor;
         private IDeveloperAccessor _developerAccesor;
 
         public Sistema(IEmailService emailService, 
             IEmailAccessor emailAccesor, 
             IClientAccessor clientAccesor,
+            IAdminAccessor adminAccesor,
             ILeaderAccessor leaderAccesor,
             IDeveloperAccessor developerAccesor)
         {
             _emailService = emailService;
             _emailAccesor = emailAccesor;
             _clientAccesor = clientAccesor;
+            _adminAccesor = adminAccesor;
             _leaderAccesor = leaderAccesor;
             _developerAccesor = developerAccesor;
         }         
@@ -83,18 +87,20 @@ namespace Business
             return results;
         }
 
-        public List<Admin> GetAdmins()
+        public List<AdminDTO> GetAdmins()
         {
-            List<Admin> admins = new List<Admin>();
-            foreach (var p in _persons)
+            List<AdminDTO> results = new List<AdminDTO>();
+
+            var admins = _adminAccesor.GetAll();
+
+            foreach (AdminDTO admin in admins)
             {
-                if (p is Admin && p.Removed == false)
+                if (admin.Removed == false)
                 {
-                    Admin a = (Admin)p;
-                    admins.Add(a);
+                    results.Add(admin);
                 }
             }
-            return admins;
+            return results;
         }
         public List<Position> GetPositions()
         {
@@ -144,10 +150,10 @@ namespace Business
         {
             _deliveries.Add(d);
         }
-        public void AddAdmin(Admin a)
+        public void AddAdmin(AdminDTO a)
         {
-            a.IsValid();
-            _persons.Add(a);
+            //a.IsValid();
+            //_persons.Add(a);
         }
         #endregion
 
@@ -320,13 +326,13 @@ namespace Business
             }
         }
         #endregion
-        public Admin Login(String email, String password)
+        public AdminDTO Login(String email, String password)
         {
             if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
             {
                 throw new Exception("Los campos no deben ser vacios");
             }
-            foreach (Admin a in GetAdmins())
+            foreach (AdminDTO a in GetAdmins())
             { //Si los datos recividos coinciden con un usuario registrado permite
                 if (a.Email.Equals(email) && a.Password.Equals(password))
                 {

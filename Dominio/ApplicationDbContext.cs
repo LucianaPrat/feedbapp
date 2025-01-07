@@ -27,6 +27,9 @@ namespace Dominio
             modelBuilder.Entity<Email>().Property(e => e.Topic).HasMaxLength(50);
             modelBuilder.Entity<Email>().Property(e => e.Body).HasMaxLength(500);
 
+            // Admin
+            modelBuilder.Entity<Entity.Admin>().Property(c => c.Name).HasMaxLength(50);
+
             // Leader
             //modelBuilder.Entity<Leader>().HasOne<Client>().WithMany(c => c.Leaders).HasForeignKey(e => e.ClientId).IsRequired();
 
@@ -39,5 +42,6 @@ namespace Dominio
         public DbSet<Email> Emails => Set<Email>();
         public DbSet<Leader> Leaders => Set<Leader>();
         public DbSet<Developer> Developers => Set<Developer>();
+        public DbSet<Entity.Admin> Admins => Set<Entity.Admin>();
     }
 }

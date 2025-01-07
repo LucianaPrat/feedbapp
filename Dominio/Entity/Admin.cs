@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 
 namespace Dominio.Entity
 {
-    public class Client
+    public class Admin
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public string Email { get; set; }
+        public string Password { get; set; }
         public bool Active { get; set; }
-        public bool Removed { get; set; }        
-        public ICollection<Leader> Leaders { get; set; }
-    } 
+        public bool Removed { get; set; }
+    }
 }
