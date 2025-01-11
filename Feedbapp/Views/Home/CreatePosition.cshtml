@@ -1,4 +1,4 @@
-﻿@model Dominio.Position
+﻿@model Dominio.DTO.PositionDTO
 
 @{
     ViewData["Title"] = "CreatePosition";
@@ -11,12 +11,19 @@
         <form asp-action="CreatePosition">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>    
             <label for="exampleSelect">Developers</label>
-            <selec@* t asp-for="Developer.Id"  class="form-control" id="exampleSelect">
-                @foreach (Developer d in ViewBag.developers)
+                <select asp-for="Developer.Id" class="form-control" id="exampleSelect">
+                    @foreach (Dominio.DTO.DeveloperDTO d in ViewBag.developers)
+                    {
+                        <option value="@d.Id">@d.Name @d.LastName</option>
+                    }
+                </select>
+            <label for="exampleSelect">Leaders</label>
+            @* <select asp-for="Leader.Id" class="form-control" id="exampleSelect">
+                @foreach (Dominio.DTO.LeaderDTO l in ViewBag.leaders)
                 {
-                    <option value="@d.Id">@d.Name @d.LastName</option>
+                    <option value="@l.Id">@l.Name @l.LastName</option>
                 }
-            </select *@>
+            </select> *@
             <div class="form-group">
                 <label asp-for="Description" class="control-label">Description</label>
                 <input asp-for="Description" class="form-control" />

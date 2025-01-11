@@ -38,10 +38,11 @@ namespace Dominio
             modelBuilder.Entity<Client>().HasData(new Client { Id = 2, Active = true, Removed = false, Name = "YouTube" });
         }
 
-        public DbSet<Client> Clients => Set<Client>();
-        public DbSet<Email> Emails => Set<Email>();
-        public DbSet<Leader> Leaders => Set<Leader>();
-        public DbSet<Developer> Developers => Set<Developer>();
-        public DbSet<Entity.Admin> Admins => Set<Entity.Admin>();
+        public DbSet<Entity.Client> Clients => Set<Client>();
+        public DbSet<Entity.Email> Emails => Set<Email>();
+        public DbSet<Entity.Leader> Leaders => Set<Leader>();
+        public DbSet<Entity.Developer> Developers => Set<Developer>();
+        public DbSet<Entity.Admin> Admins => Set<Admin>();
+        public DbSet<Entity.Position> Positions => Set<Position>();
     }
 }

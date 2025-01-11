@@ -63,7 +63,7 @@ namespace Dominio.Accessors.Leaders
             leader.Email = leaderDto.Email;
             leader.Active = leaderDto.Active;
             leader.Removed = leaderDto.Removed;
-            leader.ClientId = leaderDto.ClientId;
+            //leader.ClientId = leaderDto.ClientId;
 
             _context.SaveChanges();
         }
@@ -94,7 +94,6 @@ namespace Dominio.Accessors.Leaders
                 Name = leader.Name,
                 LastName = leader.LastName,
                 Email = leader.Email,
-                ClientId = leader.ClientId,
                 Client = leader.Client!=null? ClientAccessor.ConvertToDTO(leader.Client):null,
                 Removed = leader.Removed
             };

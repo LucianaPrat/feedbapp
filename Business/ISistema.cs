@@ -11,37 +11,27 @@ namespace Business
         List<DeveloperDTO> GetDevelopers();
         List<LeaderDTO> GetLeaders();
         List<AdminDTO> GetAdmins();
-        List<Position> GetPositions();
+        List<PositionDTO> GetPositions();
         List<Deliveries> GetDeliveries();
-        //void AddClient(ClientDTO clientDTO);
-        void AddPerson(PersonDTO p);
-        void AddPosition(Position p);
-        void AddDeliveries(Deliveries d);
         void AddAdmin(AdminDTO a);
-
         void CreateClient(ClientDTO c);
         void CreateDeveloper(DeveloperDTO dev);
-
-        void CreatePosition(Position p);
+        void CreatePosition(PositionDTO p);
         void CreateLeader(LeaderDTO l);
         void CreateDeliverie(Deliveries d);
         Deliveries? SearchDeliveries(int id);
         LeaderDTO? SearchLeaderId(int id);
         DeveloperDTO? SearchDeveloperId(int id);
         ClientDTO? SearchClientId(int id);
-
-        Position? SerchPositionId(int id);
-
+        PositionDTO? SerchPositionId(int id);
         void EditClient(ClientDTO c);
         void EditDeveloper(DeveloperDTO d);
-        void EditPosition(Position p);
+        void EditPosition(PositionDTO p);
         void EditLeader(LeaderDTO l);
-
         void DeleteClient(ClientDTO? cli);
-
         void DeleteLeader(LeaderDTO? li);
         void DeleteDeveloper(DeveloperDTO? dev);
-        void DeletePosition(Position? p);
+        void DeletePosition(PositionDTO? p);
         AdminDTO Login(String email, String password);
         void SendEmail(int positionId, EmailDTO e, EmailConfig emailConfig);
     }

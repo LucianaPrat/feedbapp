@@ -8,6 +8,7 @@ using Feedbapp.Services;
 using Microsoft.EntityFrameworkCore;
 using Dominio.Accessors.Developers;
 using Dominio.Accessors.Admins;
+using Dominio.Accessors.Positions;
 
 namespace Feedbapp
 {
@@ -28,6 +29,7 @@ namespace Feedbapp
             builder.Services.AddScoped<IAdminAccessor, AdminAccessor>();
             builder.Services.AddScoped<ILeaderAccessor, LeaderAccessor>();
             builder.Services.AddScoped<IDeveloperAccessor, DeveloperAccessor>();
+            builder.Services.AddScoped<IPositionAccessor, PositionAccessor>();
             builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer("name=DefaultConnection"));
             var app = builder.Build();
 

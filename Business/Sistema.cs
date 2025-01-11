@@ -9,28 +9,28 @@ using Dominio.Entity;
 using Feedbapp.Services;
 using Dominio.Accessors.Developers;
 using Dominio.Accessors.Admins;
+using Dominio.Accessors.Positions;
 
 namespace Business
 {
     public class Sistema : ISistema
     {
-        private static List<PersonDTO> _persons { get; set; } = new List<PersonDTO>();
-        private static List<Position> _positions { get; set; } = new List<Position>();
         private static List<Deliveries> _deliveries { get; set; } = new List<Deliveries>();
-
         private IEmailService _emailService;
         private IEmailAccessor _emailAccesor;
         private IClientAccessor _clientAccesor;
         private IAdminAccessor _adminAccesor;
         private ILeaderAccessor _leaderAccesor;
         private IDeveloperAccessor _developerAccesor;
+        private IPositionAccessor _positionAccesor;
 
-        public Sistema(IEmailService emailService, 
-            IEmailAccessor emailAccesor, 
+        public Sistema(IEmailService emailService,
+            IEmailAccessor emailAccesor,
             IClientAccessor clientAccesor,
             IAdminAccessor adminAccesor,
             ILeaderAccessor leaderAccesor,
-            IDeveloperAccessor developerAccesor)
+            IDeveloperAccessor developerAccesor,
+            IPositionAccessor positionAccessor)
         {
             _emailService = emailService;
             _emailAccesor = emailAccesor;
@@ -38,7 +38,8 @@ namespace Business
             _adminAccesor = adminAccesor;
             _leaderAccesor = leaderAccesor;
             _developerAccesor = developerAccesor;
-        }         
+            _positionAccesor = positionAccessor;
+        }
 
         #region Gets
         public List<ClientDTO> GetClients()
@@ -47,11 +48,11 @@ namespace Business
 
             var clients = _clientAccesor.GetAll();
 
-            foreach ( ClientDTO client in clients )
+            foreach (ClientDTO client in clients)
             {
-                if(client.Removed == false)
+                if (client.Removed == false)
                 {
-                    results.Add( client );
+                    results.Add(client);
                 }
             }
             return results;
@@ -74,9 +75,7 @@ namespace Business
         public List<LeaderDTO> GetLeaders()
         {
             List<LeaderDTO> results = new List<LeaderDTO>();
-
             var leaders = _leaderAccesor.GetAll();
-
             foreach (LeaderDTO leader in leaders)
             {
                 if (leader.Removed == false)
@@ -90,9 +89,7 @@ namespace Business
         public List<AdminDTO> GetAdmins()
         {
             List<AdminDTO> results = new List<AdminDTO>();
-
             var admins = _adminAccesor.GetAll();
-
             foreach (AdminDTO admin in admins)
             {
                 if (admin.Removed == false)
@@ -102,10 +99,10 @@ namespace Business
             }
             return results;
         }
-        public List<Position> GetPositions()
+        public List<PositionDTO> GetPositions()
         {
-            List<Position> pos = new List<Position>();
-            foreach (var p in _positions)
+            List<PositionDTO> pos = new List<PositionDTO>();
+            foreach (var p in _positionAccesor.GetAll())
             {
                 if (p.Removed == false)
                 {
@@ -138,18 +135,18 @@ namespace Business
         //    //    //_clients.Add(c);
         //    //}
         //}
-        public void AddPerson(PersonDTO p)
-        {
-            _persons.Add(p);
-        }
-        public void AddPosition(Position p)
-        {
-            _positions.Add(p);
-        }       
-        public void AddDeliveries(Deliveries d)
-        {
-            _deliveries.Add(d);
-        }
+        //public void AddPerson(PersonDTO p)
+        //{
+        //    _persons.Add(p);
+        //}
+        //public void AddPosition(PositionDTO p)
+        //{
+        //    _positions.Add(p);
+        //}
+        //public void AddDeliveries(Deliveries d)
+        //{
+        //    _deliveries.Add(d);
+        //}
         public void AddAdmin(AdminDTO a)
         {
             //a.IsValid();
@@ -186,43 +183,23 @@ namespace Business
         public void CreateClient(ClientDTO c)
         {
             _clientAccesor.Save(c);
-
-            //if (!_clients.Contains(c))
-            //{
-            //    c.IsValid();
-            //    _clients.Add(c);
-            //}
-            //else
-            //{
-            //    throw new Exception("Ya existe este cliente");
-            //}
-
         }
         public void CreateDeveloper(DeveloperDTO dev)
         {
             _developerAccesor.Save(dev);
         }
 
-        public void CreatePosition(Position p)
+        public void CreatePosition(PositionDTO p)
         {
-            //if (!_positions.Contains(p))
-            //{
-            //    Developer? d = SearchDeveloperId(p.Developer.Id);
-            //    p.Developer = d;
-            //    _positions.Add(p);
-            //}
-            //else
-            //{
-            //    throw new Exception("Ya existe esta posicion");
-            //}
+            _positionAccesor.Save(p);
         }
         public void CreateLeader(LeaderDTO l)
         {
             _leaderAccesor.Save(l);
         }
         public void CreateDeliverie(Deliveries d)
-        {            
-            _deliveries.Add(d);            
+        {
+            _deliveries.Add(d);
         }
 
         #endregion
@@ -241,33 +218,19 @@ namespace Business
         }
         public LeaderDTO? SearchLeaderId(int id)
         {
-            foreach (LeaderDTO l in GetLeaders())
-            {
-                if (l.Id == id)
-                {
-                    return l;
-                }
-            }
-            return null;
-        } 
+            return _leaderAccesor.GetById(id);
+        }
         public DeveloperDTO? SearchDeveloperId(int id)
         {
-            return _developerAccesor.GetById(id); 
+            return _developerAccesor.GetById(id);
         }
         public ClientDTO? SearchClientId(int id)
         {
-            return _clientAccesor.GetById(id); 
-        } 
-        public Position? SerchPositionId(int id)
+            return _clientAccesor.GetById(id);
+        }
+        public PositionDTO? SerchPositionId(int id)
         {
-            foreach (Position p in _positions)
-            {
-                if (p.Id == id)
-                {
-                    return p;
-                }
-            }
-            return null;
+            return _positionAccesor.GetById(id);
         }
 
         #endregion
@@ -314,16 +277,11 @@ namespace Business
         public void DeleteDeveloper(DeveloperDTO? dev)
         {
             _developerAccesor.Delete(dev);
+
         }
-        public void DeletePosition(Position? p)
+        public void DeletePosition(PositionDTO? p)
         {
-            foreach (var po in _positions)
-            {
-                if (po == p)
-                {
-                    po.Delete();
-                }
-            }
+            _positionAccesor.Delete(p);
         }
         #endregion
         public AdminDTO Login(String email, String password)
@@ -341,15 +299,17 @@ namespace Business
             }
             throw new Exception("No existe un administrador con esos datos");
         }
-
-        public void SendEmail(int positionId,EmailDTO e, EmailConfig emailConfig)
+        public void SendEmail(int positionId, EmailDTO e, EmailConfig emailConfig)
         {
             e.IsValid();
-            Position p = SerchPositionId(positionId);
-            CreateDeliverie(new Deliveries(p,e));
-
+            PositionDTO p = SerchPositionId(positionId);
+            CreateDeliverie(new Deliveries(p, e));
             _emailService.SendEmail(e, emailConfig);
+        }
 
+        public void EditPosition(PositionDTO p)
+        {
+            throw new NotImplementedException();
         }
     }
 }

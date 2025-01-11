@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Dominio.Position>
+﻿@model IEnumerable<Dominio.DTO.PositionDTO>
 
 <div class="text-center" style="padding-top: 15px; padding-bottom: 10px;">
     <h1 style="color: #333A73; font-weight: bold; font-size: 2.5rem; margin-bottom: 20px;">Positions</h1>
@@ -14,6 +14,7 @@ else
             <thead>
                 <tr>
                     <th>Developer</th>
+                    <th>Description</th>
                     <th>Client</th>
                     <th>Leaders</th>
                     <th>Position</th>
@@ -21,14 +22,14 @@ else
                     <th></th>
                 </tr>
             </thead>
-            @foreach (Dominio.Position p in Model)
+            @foreach (Dominio.DTO.PositionDTO p in Model)
             {
                 <tbody>
                     <tr>
                         <td>@p.Developer.Name @p.Developer.LastName </td>
-                        <td>@p.Developer.Leader.Client.Name</td>
-                        <td>@p.Developer.Leader.Name @p.Developer.Leader.LastName</td>
                         <td>@p.Description</td>
+                        <td>@p.Developer.Leader.Client.Name</td>
+                        <td>@p.Developer.Leader.Name</td>
                         <td>@p.Recurrence</td>
                         <td>
                             <a href="@Url.Action("EditPosition", "Home", new { id = p.Id })" class="btn-custom btn-primary">Edit</a>

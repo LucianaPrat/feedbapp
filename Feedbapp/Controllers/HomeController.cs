@@ -4,6 +4,7 @@ using Dominio;
 using Dominio.DTO;
 using Dominio.Entity;
 using Feedbapp.Models;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -92,14 +93,14 @@ namespace Feedbapp.Controllers
         public IActionResult CreatePosition()
         {
             ViewBag.developers = _sistema.GetDevelopers();
+            ViewBag.leaders = _sistema.GetLeaders();
             return View();
         }
 
         [HttpPost]
 
-        public IActionResult CreatePosition(Position p)
+        public IActionResult CreatePosition(PositionDTO p)
         {
-            ViewBag.developers = _sistema.GetDevelopers();
             try
             {                
                 _sistema.CreatePosition(p);                
@@ -109,7 +110,6 @@ namespace Feedbapp.Controllers
             {
                 ViewBag.mensaje = e.Message;
             }
-
             return RedirectToAction("Positions");
         }
         
@@ -168,11 +168,11 @@ namespace Feedbapp.Controllers
         public IActionResult EditPosition(int id)
         {
             ViewBag.developers = _sistema.GetDevelopers();
-            Position? serch = _sistema.SerchPositionId(id);
+            PositionDTO? serch = _sistema.SerchPositionId(id);
             return View(serch);
         }
         [HttpPost]
-        public IActionResult EditPosition(Position d)
+        public IActionResult EditPosition(PositionDTO d)
         {
             ViewBag.developers = _sistema.GetDevelopers();
             _sistema.EditPosition(d);
@@ -231,7 +231,6 @@ namespace Feedbapp.Controllers
             {
                 ViewBag.mensaje = e.Message;
             }
-
             return RedirectToAction("Leaders");
         }
         public IActionResult DeleteDeveloper(int id)
@@ -246,13 +245,13 @@ namespace Feedbapp.Controllers
                 ViewBag.mensaje = e.Message;
             }
 
-            return RedirectToAction("Leaders");
+            return RedirectToAction("Developers");
         }
         public IActionResult DeletePosition(int id)
         {
             try
             {
-                Position? serch = _sistema.SerchPositionId(id);
+                PositionDTO? serch = _sistema.SerchPositionId(id);
                 _sistema.DeletePosition(serch);
             }
             catch (Exception e)
@@ -260,7 +259,7 @@ namespace Feedbapp.Controllers
                 ViewBag.mensaje = e.Message;
             }
 
-            return RedirectToAction("Leaders");
+            return RedirectToAction("Positions");
         }
         #endregion
 
@@ -279,11 +278,8 @@ namespace Feedbapp.Controllers
                 {//guarda su id y su rol
                     HttpContext.Session.SetInt32("LoggedId", a.Id);
                     HttpContext.Session.SetString("LoggedRol", a.GetType().Name);
-                    //dependiendo el rol muestra los index correspondientes
-                    if (a.GetType().Name.Equals("Administrador"))
-                    {
-                        return RedirectToAction("Index", "Administrador");
-                    }
+                    //dependiendo el rol muestra los index correspondientes                    
+                    return RedirectToAction("Index", "Home");                    
                 }
             } 
             catch (Exception ex)
@@ -295,7 +291,7 @@ namespace Feedbapp.Controllers
 
         public IActionResult SendEmail(int id)
         {
-           Position serch = _sistema.SerchPositionId(id);
+           PositionDTO serch = _sistema.SerchPositionId(id);
            ViewBag.position = serch;
            return View();
         }
@@ -334,5 +330,12 @@ namespace Feedbapp.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+            return RedirectToAction("Login", "Home");
+        }
+        
     }
 }

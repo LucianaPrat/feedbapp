@@ -27,7 +27,7 @@
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label for="exampleSelect">Clientes</label>
+                <label for="exampleSelect">Clients</label>
                 <select asp-for="ClientId" class="form-control" id="exampleSelect">
                     @foreach (Dominio.DTO.ClientDTO c in ViewBag.clients)
                     {

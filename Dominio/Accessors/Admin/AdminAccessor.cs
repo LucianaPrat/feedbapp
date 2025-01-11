@@ -85,8 +85,10 @@ namespace Dominio.Accessors.Admins
             return new AdminDTO
             {
                 Id = admin.Id,
-                Active = admin.Active,
                 Name = admin.Name,
+                Email = admin.Email,
+                Password = admin.Password,
+                Active = admin.Active,
                 Removed = admin.Removed
             };
         }

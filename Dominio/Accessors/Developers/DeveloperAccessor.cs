@@ -1,4 +1,5 @@
 ﻿using Dominio.Accessors.Leaders;
+using Dominio.Accessors.Positions;
 using Dominio.DTO;
 using Dominio.Entity;
 using Microsoft.EntityFrameworkCore;
@@ -24,7 +25,7 @@ namespace Dominio.Accessors.Developers
             return _context.Developers.Where(c => c.Active && !c.Removed)
                 .Include(c=>c.Leader)
                                    .ToList()
-                                   .Select(c => ConvertToDTO(c))
+                                             .Select(c => ConvertToDTO(c))
                                    .ToList();
         }
 
@@ -63,7 +64,6 @@ namespace Dominio.Accessors.Developers
             developer.Email = developerDto.Email;
             developer.Active = developerDto.Active;
             developer.Removed = developerDto.Removed;
-            developer.LeaderId = developerDto.LeaderId;
 
             _context.SaveChanges();
         }
@@ -94,8 +94,7 @@ namespace Dominio.Accessors.Developers
                 Name = developer.Name,
                 LastName = developer.LastName,
                 Email = developer.Email,
-                LeaderId = developer.LeaderId,
-                Leader = developer.Leader!=null?LeaderAccessor.ConvertToDTO(developer.Leader):null,
+                Leader = developer.Leader!=null? LeaderAccessor.ConvertToDTO(developer.Leader):null,
                 Active = developer.Active,
                 Removed = developer.Removed
             };
