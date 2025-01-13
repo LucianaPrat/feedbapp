@@ -33,12 +33,12 @@ namespace Dominio.Accessors.Positions
 
         public PositionDTO GetById(int id)
         {
-            var client = _context.Positions.FirstOrDefault(c => c.Id == id);
-            if (client == null)
+            var position = _context.Positions.Include(p => p.Developer).Include(p => p.Developer.Leader).Include(c => c.Developer.Leader.Client).FirstOrDefault(p => p.Id == id);
+            if (position == null)
             {
-                throw new Exception("Not found client with id " + id);
+                throw new Exception("Not found position with id " + id);
             }
-            return ConvertToDTO(client);
+            return ConvertToDTO(position);
         }
 
         public void Save(PositionDTO positionDto)
@@ -59,13 +59,16 @@ namespace Dominio.Accessors.Positions
             {
                 throw new Exception("Not found position with id " + positionDto.Id);
             }                        
+            //position.DeveloperId = positionDto.DeveloperId;
+            position.Description = positionDto.Description;
+            position.Recurrence = positionDto.Recurrence;
             position.Removed = positionDto.Removed;
             _context.SaveChanges();
         }
 
         public void Delete(PositionDTO positionDto)
         {
-            var position = _context.Leaders.FirstOrDefault(c => c.Id == positionDto.Id);
+            var position = _context.Positions.FirstOrDefault(c => c.Id == positionDto.Id);
             if (position == null)
             {
                 throw new Exception("Not found leader with id " + positionDto.Id);
@@ -84,34 +87,35 @@ namespace Dominio.Accessors.Positions
             return new PositionDTO
             {
                 Id = position.Id,
-                Developer = position.Developer != null ? DeveloperAccessor.ConvertToDTO(position.Developer) : null,
+                Developer = position.Developer!= null ? DeveloperAccessor.ConvertToDTO(position.Developer):null,
+                DeveloperId = position.DeveloperId,
                 Description = position.Description,
-                Leader = position.Developer.Leader != null ? LeaderAccessor.ConvertToDTO(position.Developer.Leader) : null,
-                Client = position.Developer.Leader.Client != null ? ClientAccessor.ConvertToDTO(position.Developer.Leader.Client) : null,
+                Leader = position.Developer.Leader!= null ? LeaderAccessor.ConvertToDTO(position.Developer.Leader):null,
+                Client = position.Developer.Leader.Client!= null ? ClientAccessor.ConvertToDTO(position.Developer.Leader.Client):null,
                 Recurrence = position.Recurrence,
                 Removed = position.Removed
             };
         }
 
-        public static Position ConvertToEntity(PositionDTO position)
+        public static Position ConvertToEntity(PositionDTO positionDTO)
         {
-            if (position == null)
+            if (positionDTO == null)
             {
                 throw new ArgumentNullException("position");
             }
             return new Position
             {
-                Id = position.Id,              
-                DeveloperId = position.Developer.Id,
-                Description = position.Description,
-                Recurrence = position.Recurrence,
-                Removed = position.Removed
+                Id = positionDTO.Id,
+                DeveloperId = positionDTO.Developer.Id,
+                Description = positionDTO.Description,
+                Recurrence = positionDTO.Recurrence,
+                Removed = positionDTO.Removed
             };
         }
 
         PositionDTO IAccessor<PositionDTO>.GetById(int id)
         {
-            var position = _context.Positions.FirstOrDefault(c => c.Id == id);
+            var position = _context.Positions.Include(p => p.Developer).Include(p => p.Developer.Leader).Include(p => p.Developer.Leader.Client).FirstOrDefault(c => c.Id == id);
             if (position == null)
             {
                 throw new Exception("Not found position with id " + id);

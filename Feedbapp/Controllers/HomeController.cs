@@ -176,7 +176,7 @@ namespace Feedbapp.Controllers
         {
             ViewBag.developers = _sistema.GetDevelopers();
             _sistema.EditPosition(d);
-            return View();
+            return RedirectToAction("Positions");
         }
         public IActionResult EditClient(int id)
         {
@@ -244,7 +244,6 @@ namespace Feedbapp.Controllers
             {
                 ViewBag.mensaje = e.Message;
             }
-
             return RedirectToAction("Developers");
         }
         public IActionResult DeletePosition(int id)

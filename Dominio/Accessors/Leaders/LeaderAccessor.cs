@@ -64,7 +64,6 @@ namespace Dominio.Accessors.Leaders
             leader.Active = leaderDto.Active;
             leader.Removed = leaderDto.Removed;
             //leader.ClientId = leaderDto.ClientId;
-
             _context.SaveChanges();
         }
 

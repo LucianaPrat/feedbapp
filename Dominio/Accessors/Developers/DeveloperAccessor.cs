@@ -23,15 +23,15 @@ namespace Dominio.Accessors.Developers
         public List<DeveloperDTO> GetAll()
         {
             return _context.Developers.Where(c => c.Active && !c.Removed)
-                .Include(c=>c.Leader)
+                                   .Include(c=>c.Leader)
                                    .ToList()
-                                             .Select(c => ConvertToDTO(c))
+                                   .Select(c => ConvertToDTO(c))
                                    .ToList();
         }
 
         public DeveloperDTO GetById(int id)
         {
-            var developer = _context.Developers.FirstOrDefault(c => c.Id == id);
+            var developer = _context.Developers.Include(c => c.Leader).FirstOrDefault(c => c.Id == id);
             if (developer == null)
             {
                 throw new Exception("Not found developer with id " + id);
@@ -52,7 +52,7 @@ namespace Dominio.Accessors.Developers
             {
                 throw new ArgumentNullException();
             }
-            var developer = _context.Developers.FirstOrDefault(c => c.Id == developerDto.Id);
+            var developer = _context.Developers.Include(c => c.Leader).FirstOrDefault(c => c.Id == developerDto.Id);
             if (developer == null)
             {
                 throw new Exception("Not found developer with id " + developerDto.Id);
@@ -70,7 +70,7 @@ namespace Dominio.Accessors.Developers
 
         public void Delete(DeveloperDTO developerDto)
         {
-            var developer = _context.Developers.FirstOrDefault(c => c.Id == developerDto.Id);
+            var developer = _context.Developers.Include(d => d.Leader).FirstOrDefault(c => c.Id == developerDto.Id);
             if (developer == null)
             {
                 throw new Exception("Not found developer with id " + developerDto.Id);
@@ -79,8 +79,6 @@ namespace Dominio.Accessors.Developers
 
             _context.SaveChanges();
         }
-
-
         public static DeveloperDTO ConvertToDTO(Developer developer)
         {
             if (developer == null)
@@ -99,7 +97,6 @@ namespace Dominio.Accessors.Developers
                 Removed = developer.Removed
             };
         }
-
 
         public static Developer ConvertToEntity(DeveloperDTO developer)
         {

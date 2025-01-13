@@ -19,10 +19,7 @@ namespace Dominio.DTO
         public bool Removed { get; set; }
 
         #region Builders
-        public PositionDTO()
-        {
-            Removed = false;
-        }
+        
         #endregion
 
         #region Methods

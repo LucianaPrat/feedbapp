@@ -244,22 +244,15 @@ namespace Business
         {
             _developerAccesor.Update(d);
         }
-        public void EditPosition(Position p)
-        {
-            //foreach (Position po in _positions)
-            //{
-            //    if (po.Id == p.Id)
-            //    {
-            //        DeveloperDTO dev = SearchDeveloperId(p.Developer.Id);
-            //        po.Developer = dev;
-            //        po.Recurrence = p.Recurrence;
-            //        po.Description = p.Description;
-            //    }
-            //}
-        }
+       
         public void EditLeader(LeaderDTO l)
         {
             _leaderAccesor.Update(l);
+        }
+
+        public void EditPosition(PositionDTO p)
+        {
+            _positionAccesor.Update(p);
         }
         #endregion
 
@@ -274,12 +267,12 @@ namespace Business
             _leaderAccesor.Delete(l);
         }
 
-        public void DeleteDeveloper(DeveloperDTO? dev)
+        public void DeleteDeveloper(DeveloperDTO dev)
         {
             _developerAccesor.Delete(dev);
 
         }
-        public void DeletePosition(PositionDTO? p)
+        public void DeletePosition(PositionDTO p)
         {
             _positionAccesor.Delete(p);
         }
@@ -307,9 +300,6 @@ namespace Business
             _emailService.SendEmail(e, emailConfig);
         }
 
-        public void EditPosition(PositionDTO p)
-        {
-            throw new NotImplementedException();
-        }
+        
     }
 }
