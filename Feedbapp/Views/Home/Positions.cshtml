@@ -34,15 +34,62 @@ else
                         <td>
                             <a href="@Url.Action("EditPosition", "Home", new { id = p.Id })" class="btn-custom btn-primary">Edit</a>
                             <a href="@Url.Action("SendEmail", "Home", new { id = p.Id })" class="btn-custom btn-secondary">Send email</a>
-                            <a href="@Url.Action("DeletePosition", "Home", new { id = p.Id })" class="btn-custom btn-secondary">Delate</a>             
+                            <a href="#"
+                               class="btn-custom btn-secondary"
+                               data-bs-toggle="modal"
+                               data-bs-target="#confirmDeleteModal"
+                               onclick="setPositionInfo(
+                               '@p.Id',
+                               '@p.Description',
+                               '@p.Developer?.Name @p.Developer?.LastName',
+                               '@p.Leader?.Name @p.Leader?.LastName',
+                               '@p.Client?.Name',
+                               '@Url.Action("DeletePosition", "Home", new { id = p.Id })')">Delete</a>
 
                         </td>
                     </tr>
                 </tbody>
             }
         </table>
+        <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="confirmDeleteLabel">Confirm Deletion</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to delete the following position?</p>
+                        <p><strong>ID:</strong> <span id="positionId"></span></p>
+                        <p><strong>Description:</strong> <span id="positionDescription"></span></p>
+                        <p><strong>Developer:</strong> <span id="positionDeveloper"></span></p>
+                        <p><strong>Leader:</strong> <span id="positionLeader"></span></p>
+                        <p><strong>Client:</strong> <span id="positionClient"></span></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <a id="confirmDeleteLink" href="#" class="btn btn-danger">Delete</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 }
 <div class="text-center mt-3" style="padding-top: 20px; padding-bottom: 20px;">
     <a href="@Url.Action("CreatePosition", "Home")" class="btn-custom btn-tertiary" style="padding: 10px 20px;">Create positions</a>
 </div>
+
+<script>
+    function setPositionInfo(id, description, developer, leader, client, deleteUrl) {
+        // Configura los valores en el modal
+        document.getElementById('positionId').textContent = id;
+        document.getElementById('positionDescription').textContent = description;
+        document.getElementById('positionDeveloper').textContent = developer || "No developer assigned";
+        document.getElementById('positionLeader').textContent = leader || "No leader assigned";
+        document.getElementById('positionClient').textContent = client || "No client assigned";
+
+        // Configura el enlace de eliminación
+        document.getElementById('confirmDeleteLink').setAttribute('href', deleteUrl);
+    }
+</script>

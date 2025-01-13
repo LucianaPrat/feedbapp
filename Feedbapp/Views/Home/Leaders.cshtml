@@ -31,16 +31,56 @@ else
                          <td>@l.Active</td>
                         <td>
                             <a href="@Url.Action("EditLeader", "Home", new { id = l.Id })" class="btn-custom btn-primary">Edit</a>
-                            <a href="@Url.Action("DeleteLeader", "Home", new { id = l.Id })" class="btn-custom btn-secondary">Delete</a>
-    
+                            <a href="#"
+                               class="btn-custom btn-secondary"
+                               data-bs-toggle="modal"
+                               data-bs-target="#confirmDeleteModal"
+                               onclick="setLeaderInfo(
+                       '@l.Name @l.LastName',
+                       '@l.Email',
+                       '@l.Client?.Name',
+                       '@Url.Action("DeleteLeader", "Home", new { id = l.Id })')">Delete</a>    
                         </td>
                     </tr>
                 </tbody>
             }
-        </table>       
+        </table>
+        <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="confirmDeleteLabel">Confirm Deletion</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to delete the following leader?</p>
+                        <p><strong>Full Name:</strong> <span id="leaderName"></span></p>
+                        <p><strong>Email:</strong> <span id="leaderEmail"></span></p>
+                        <p><strong>Client:</strong> <span id="leaderClient"></span></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <a id="confirmDeleteLink" href="#" class="btn btn-danger">Delete</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>    
 }
 <div class="text-center mt-3" style="padding-top: 20px; padding-bottom: 20px;">
     <a href="@Url.Action("CreateLeader", "Home")" class="btn-custom btn-tertiary" style="padding: 10px 20px;">Create Leader</a>
 </div>
 <p>@ViewBag.Message</p>
+
+<script>
+    function setLeaderInfo(name, email, client, deleteUrl) {
+        // Configura los valores del modal
+        document.getElementById('leaderName').textContent = name;
+        document.getElementById('leaderEmail').textContent = email;
+        document.getElementById('leaderClient').textContent = client || "No client assigned";
+
+        // Configura el enlace de eliminación
+        document.getElementById('confirmDeleteLink').setAttribute('href', deleteUrl);
+    }
+</script>

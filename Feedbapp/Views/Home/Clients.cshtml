@@ -20,14 +20,39 @@
                     <td>@c.Name</td>
                     <td>@c.Active</td>
                     <td>
-                        <a href="@Url.Action("EditClient", "Home", new { id = c.Id })" class="btn-custom btn-primary">Edit</a>
-                        <a href="@Url.Action("DeleteClient", "Home", new { id = c.Id })" class="btn-custom btn-secondary">Delete</a>
+                        <a href="@Url.Action("EditClient", "Home", new { id = c.Id })" class="btn-custom btn-primary">Edit</a>                    
+                        <a href="#"
+                           class="btn-custom btn-secondary"
+                           data-bs-toggle="modal"
+                           data-bs-target="#confirmDeleteModal"
+                           onclick="setClientInfo('@c.Name', '@c.Active', '@Url.Action("DeleteClient", "Home", new { id = c.Id })')">Delete</a>                    
                     </td>
                 </tr>
             }
         </tbody>
     </table>
 </div>
+
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmDeleteLabel">Confirm Deletion</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete the following client?</p>
+                <p><strong>Name:</strong> <span id="clientName"></span></p>
+                <p><strong>Active:</strong> <span id="clientActive"></span></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <a id="confirmDeleteLink" href="#" class="btn btn-danger">Delete</a>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 
 <div class="text-center mt-3" style="padding-top: 20px; padding-bottom: 20px;">
@@ -38,3 +63,14 @@
 {
     <p class="text-center mt-3">@ViewBag.Mensaje</p>
 }
+
+<script>
+    function setClientInfo(name, active, deleteUrl) {
+        // Actualiza la información del cliente en el modal
+        document.getElementById('clientName').textContent = name;
+        document.getElementById('clientActive').textContent = active === "True" ? "Yes" : "No";
+
+        // Configura el enlace de eliminación
+        document.getElementById('confirmDeleteLink').setAttribute('href', deleteUrl);
+    }
+</script>
