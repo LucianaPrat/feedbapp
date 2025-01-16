@@ -36,11 +36,13 @@ namespace Dominio.Accessors.Clients
             return ConvertToDTO(client);
         }
 
-        public void Save(ClientDTO clientDto)
+        public ClientDTO Save(ClientDTO clientDto)
         {
             var client = ConvertToEntity(clientDto);
             _context.Clients.Add(client);
             _context.SaveChanges();
+            ClientDTO c = ConvertToDTO(client);
+            return c;
         }
 
         public void Update(ClientDTO clientDto)
@@ -74,7 +76,7 @@ namespace Dominio.Accessors.Clients
             _context.SaveChanges();
         }
 
-     public static   ClientDTO ConvertToDTO(Client client)
+     public static ClientDTO ConvertToDTO(Client client)
         {
             if (client == null)
             {

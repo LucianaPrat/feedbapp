@@ -44,5 +44,6 @@ namespace Dominio
         public DbSet<Entity.Developer> Developers => Set<Developer>();
         public DbSet<Entity.Admin> Admins => Set<Admin>();
         public DbSet<Entity.Position> Positions => Set<Position>();
+        public DbSet<Entity.Delivery> Deliveries => Set<Delivery>();
     }
 }

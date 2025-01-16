@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Dominio.Deliveries>
+﻿@model IEnumerable<Dominio.DTO.DeliveryDTO>
 
 <div class="text-center" style="padding-top: 15px; padding-bottom: 10px;">
     <h1 style="color: #333A73; font-weight: bold; font-size: 2.5rem; margin-bottom: 20px;">Envíos</h1>
@@ -17,21 +17,71 @@ else
                     <th>Developer</th>
                     <th>Lider</th>
                     <th>Date</th>
-                    <th>Last</th>
                     <th></th>
                 </tr>
             </thead>
-            @foreach (Dominio.Deliveries d in Model)
+            @foreach (Dominio.DTO.DeliveryDTO d in Model)
             {
                 <tbody>
                     <tr>
                         <td>@d.Position.Developer.Name @d.Position.Developer.LastName </td>
                         <td>@d.Position.Developer.Leader.Name @d.Position.Developer.Leader.LastName </td>
                         <td>@d.Date</td>
-                        <td></td>                       
+                        <td class="modal-footer">
+                            <a class="btn-custom btn-secondary"
+                               data-bs-toggle="modal"
+                               data-bs-target="#emailModal"
+                               data-leader-email="@d.Position.Developer.Leader.Email"
+                               data-email-topic="@d.Email.Topic"
+                               data-email-body="@d.Email.Body">
+                                Show Email
+                            </a>
+                        </td>
                     </tr>
                 </tbody>
             }
         </table>
+        <!-- Modal -->
+        <div class="modal fade" id="emailModal" tabindex="-1" aria-labelledby="emailModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="emailModalLabel">Email</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p><strong>Address Leader:</strong> <span id="address"></span></p>
+                        <p><strong>Topic:</strong> <span id="topic"></span></p>
+                        <p><strong>Body:</strong> <span id="body"></span></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <script>
+        function setEmailInfo(address, topic, body) {
+            // Set the values in the modal
+            document.getElementById('address').textContent = address || "No email address available";
+            document.getElementById('topic').textContent = topic || "No topic provided";
+            document.getElementById('body').textContent = body || "No body content provided";
+        }
+
+        // Add the event listener to the modal
+        const emailModal = document.getElementById('emailModal');
+        emailModal.addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget; // Button that triggered the modal
+            const address = button.getAttribute('data-leader-email');
+            const topic = button.getAttribute('data-email-topic');
+            const body = button.getAttribute('data-email-body');
+
+            // Update the modal content with email data
+            setEmailInfo(address, topic, body);
+        });
+    </script>
+
+
 }

@@ -38,11 +38,13 @@ namespace Dominio.Accessors.Email
             return ConvertToDTO(email);
         }
 
-        public void Save(EmailDTO emailDto)
+        public EmailDTO Save(EmailDTO emailDto)
         {
             var email = ConvertToEntity(emailDto);
             _context.Emails.Add(email);
             _context.SaveChanges();
+            EmailDTO e = ConvertToDTO(email);
+            return e;
         }
 
         public void Update(EmailDTO emailDto)
@@ -75,7 +77,7 @@ namespace Dominio.Accessors.Email
             _context.SaveChanges();
         }
 
-        EmailDTO ConvertToDTO(Entity.Email email)
+        public static EmailDTO ConvertToDTO(Entity.Email email)
         {
             return new EmailDTO
             {
@@ -86,7 +88,7 @@ namespace Dominio.Accessors.Email
             };
         }
 
-        Entity.Email ConvertToEntity(EmailDTO email)
+        public Entity.Email ConvertToEntity(EmailDTO email)
         {
             return new Entity.Email
             {
@@ -96,5 +98,7 @@ namespace Dominio.Accessors.Email
                 Body = email.Body,
             };
         }
+
+        
     }
 }

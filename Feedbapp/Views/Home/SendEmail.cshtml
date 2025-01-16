@@ -1,32 +1,35 @@
 ﻿@model Dominio.DTO.EmailDTO
+
 <h1>Send Email</h1>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="SendEmail">
-            <input id="PositionId" type="hidden" value="@ViewBag.position.Id">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <!-- Formulario para enviar el correo -->
+        <form asp-action="SendEmail" method="post">
+            <!-- Campo oculto para PositionId -->
+            <input id="PositionId" name="PositionId" type="hidden" value="@ViewBag.position.Id">
+
+            <!-- Dirección de correo del líder (oculta) -->
             <div class="form-group">
-                <label class="control-label">Leader:</label>
+                <label class="control-label">Leader Email:</label>
                 <label class="control-label">@ViewBag.position.Developer.Leader.Email</label>
-                <input asp-for="Address" type="hidden" class="control-label" value="@ViewBag.position.Developer.Leader.Email">
+                <input type="hidden" id="Address" name="Address" value="@ViewBag.position.Developer.Leader.Email">
             </div>
-            <hr />
+
+            <!-- Campo para el asunto -->
             <div class="form-group">
-                <label class="control-label">Subject</label>
-                <input asp-for="Topic" class="form-control" />
-                <span asp-validation-for="Topic" class="text-danger"></span>
+                <label for="Topic" class="control-label">Subject:</label>
+                <input id="Topic" name="Topic" class="form-control" />
             </div>
+
+            <!-- Campo para el cuerpo del mensaje -->
             <div class="form-group">
-                <label for="Body" class="control-label">Body</label>
-                <textarea asp-for="Body" class="form-control" rows="5"></textarea>
-                <span class="text-danger"></span>
+                <label for="Body" class="control-label">Body:</label>
+                <textarea id="Body" name="Body" class="form-control" rows="5"></textarea>
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>                    
+
+            <!-- Botón de envío -->
+            <button type="submit" class="btn btn-primary">Submit</button>
         </form>
     </div>
 </div>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}

@@ -48,7 +48,7 @@ namespace Dominio.DTO
             {
                 throw new Exception("El nombre puede estar vacio.");
             }
-            if (Name.Length > 40)
+            if (Name.Length > 30)
             {
                 throw new Exception("El nombre tiene que tener menos de 40 caracteres.");
             }

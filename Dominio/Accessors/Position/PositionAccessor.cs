@@ -41,11 +41,13 @@ namespace Dominio.Accessors.Positions
             return ConvertToDTO(position);
         }
 
-        public void Save(PositionDTO positionDto)
+        public PositionDTO Save(PositionDTO positionDto)
         {
             var position = ConvertToEntity(positionDto);
             _context.Positions.Add(position);
             _context.SaveChanges();
+            PositionDTO p = ConvertToDTO(position);
+            return p;
         }
 
         public void Update(PositionDTO positionDto)
@@ -59,7 +61,7 @@ namespace Dominio.Accessors.Positions
             {
                 throw new Exception("Not found position with id " + positionDto.Id);
             }                        
-            //position.DeveloperId = positionDto.DeveloperId;
+            position.DeveloperId = positionDto.Developer.Id;
             position.Description = positionDto.Description;
             position.Recurrence = positionDto.Recurrence;
             position.Removed = positionDto.Removed;

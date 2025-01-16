@@ -45,7 +45,6 @@ else
                                '@p.Leader?.Name @p.Leader?.LastName',
                                '@p.Client?.Name',
                                '@Url.Action("DeletePosition", "Home", new { id = p.Id })')">Delete</a>
-
                         </td>
                     </tr>
                 </tbody>
@@ -73,7 +72,6 @@ else
                 </div>
             </div>
         </div>
-
     </div>
 }
 <div class="text-center mt-3" style="padding-top: 20px; padding-bottom: 20px;">
@@ -82,14 +80,15 @@ else
 
 <script>
     function setPositionInfo(id, description, developer, leader, client, deleteUrl) {
-        // Configura los valores en el modal
+        // Set the values in the modal
         document.getElementById('positionId').textContent = id;
         document.getElementById('positionDescription').textContent = description;
         document.getElementById('positionDeveloper').textContent = developer || "No developer assigned";
         document.getElementById('positionLeader').textContent = leader || "No leader assigned";
         document.getElementById('positionClient').textContent = client || "No client assigned";
 
-        // Configura el enlace de eliminación
+        // Set the delete link
         document.getElementById('confirmDeleteLink').setAttribute('href', deleteUrl);
     }
 </script>
+

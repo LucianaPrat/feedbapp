@@ -37,29 +37,29 @@ namespace Dominio.Accessors.Admins
             return ConvertToDTO(admin);
         }
 
-        public void Save(AdminDTO adminDto)
+        public AdminDTO Save(AdminDTO adminDto)
         {
             var admin = ConvertToEntity(adminDto);
             _context.Admins.Add(admin);
             _context.SaveChanges();
+            AdminDTO a = ConvertToDTO(admin);
+            return a;
         }
 
-        public void Update(ClientDTO clientDto)
+        public void Update(AdminDTO adminDto)
         {
-            if (clientDto == null)
+            if (adminDto == null)
             {
                 throw new ArgumentNullException();
             }
-            var client = _context.Admins.FirstOrDefault(c => c.Id == clientDto.Id);
-            if (client == null)
+            var admin = _context.Admins.FirstOrDefault(a => a.Id == adminDto.Id);
+            if (admin == null)
             {
-                throw new Exception("Not found client with id " + clientDto.Id);
+                throw new Exception("Not found client with id " + adminDto.Id);
             }
-
-            client.Active = clientDto.Active;
-            client.Name = clientDto.Name;
-            client.Removed = clientDto.Removed;
-
+            admin.Active = adminDto.Active;
+            admin.Name = adminDto.Name;
+            admin.Removed = adminDto.Removed;
             _context.SaveChanges();
         }
 
@@ -109,11 +109,6 @@ namespace Dominio.Accessors.Admins
                 Active = admin.Active,                
                 Removed = admin.Removed
             };
-        }
-
-        public void Update(AdminDTO t)
-        {
-            throw new NotImplementedException();
         }
     }
 }

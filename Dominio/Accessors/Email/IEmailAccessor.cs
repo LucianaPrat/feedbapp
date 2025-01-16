@@ -4,11 +4,10 @@ namespace Dominio.Accessors.Email
 {
     public interface IEmailAccessor : IAccessor<EmailDTO>
     {
-        //bool Exist(int id);
-        //List<ClientDTO> GetAll();
-        //ClientDTO GetById(int id);
-        //void Save(ClientDTO clientDto);
-        //void Update(ClientDTO clientDto);
-        //bool Delete(ClientDTO clientDto);
+        public bool Exist(int id);
+        public EmailDTO GetById(int id);
+        public EmailDTO Save(EmailDTO emailDto);
+        public void Update(EmailDTO emailDto);
+        public void Delete(EmailDTO emailDto);
     }
 }

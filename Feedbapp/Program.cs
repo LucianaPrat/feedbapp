@@ -3,12 +3,13 @@ using Dominio;
 using Dominio.Accessors.Clients;
 using Dominio.Accessors.Leaders;
 using Dominio.Accessors.Email;
-using Dominio.DTO;
 using Feedbapp.Services;
 using Microsoft.EntityFrameworkCore;
 using Dominio.Accessors.Developers;
 using Dominio.Accessors.Admins;
 using Dominio.Accessors.Positions;
+using Dominio.Accessors.Deliveries;
+using Dominio.Accessors.Delivery;
 
 namespace Feedbapp
 {
@@ -30,6 +31,7 @@ namespace Feedbapp
             builder.Services.AddScoped<ILeaderAccessor, LeaderAccessor>();
             builder.Services.AddScoped<IDeveloperAccessor, DeveloperAccessor>();
             builder.Services.AddScoped<IPositionAccessor, PositionAccessor>();
+            builder.Services.AddScoped<IDeliveryAccessor, DeliveryAccessor>();
             builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer("name=DefaultConnection"));
             var app = builder.Build();
 

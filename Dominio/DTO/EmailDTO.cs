@@ -30,7 +30,7 @@ namespace Dominio.DTO
             {
                 throw new Exception("El body no puede estar vacío.");
             }
-            if (Topic.Length > 20)
+            if (Topic.Length > 30)
             {
                 throw new Exception("El asunto debe tener menos de 20 caracteres.");
             }

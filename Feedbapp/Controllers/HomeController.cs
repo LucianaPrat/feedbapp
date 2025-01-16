@@ -168,7 +168,7 @@ namespace Feedbapp.Controllers
         public IActionResult EditPosition(int id)
         {
             ViewBag.developers = _sistema.GetDevelopers();
-            PositionDTO? serch = _sistema.SerchPositionId(id);
+            PositionDTO? serch = _sistema.SearchPositionId(id);
             return View(serch);
         }
         [HttpPost]
@@ -250,7 +250,7 @@ namespace Feedbapp.Controllers
         {
             try
             {
-                PositionDTO? serch = _sistema.SerchPositionId(id);
+                PositionDTO? serch = _sistema.SearchPositionId(id);
                 _sistema.DeletePosition(serch);
             }
             catch (Exception e)
@@ -290,13 +290,23 @@ namespace Feedbapp.Controllers
 
         public IActionResult SendEmail(int id)
         {
-           PositionDTO serch = _sistema.SerchPositionId(id);
+           PositionDTO serch = _sistema.SearchPositionId(id);
            ViewBag.position = serch;
            return View();
         }
+
         [HttpPost]
-        public IActionResult SendEmail(EmailDTO e, int PositionId)
+        public IActionResult SendEmail(IFormCollection form, int PositionId)
         {
+            var topic = form["Topic"];
+            var body = form["Body"];
+            var address = form["Address"];
+            var e = new EmailDTO
+            {
+                Topic = topic,
+                Body = body,
+                Address = address
+            };
             EmailConfig emailConfig = new EmailConfig();
             emailConfig.Host = _config.GetSection("Email:Host").Value;
             emailConfig.Port = _config.GetSection("Email:Port").Value;

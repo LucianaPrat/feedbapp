@@ -22,7 +22,7 @@ namespace Dominio.Accessors.Leaders
         public List<LeaderDTO> GetAll()
         {
             return _context.Leaders.Where(c => c.Active && !c.Removed)
-                                    .Include( c=> c.Client)
+                                   .Include( c=> c.Client)
                                    .ToList()
                                    .Select(c => ConvertToDTO(c))
                                    .ToList();
@@ -38,11 +38,13 @@ namespace Dominio.Accessors.Leaders
             return ConvertToDTO(client);
         }
 
-        public void Save(LeaderDTO leaderDto)
+        public LeaderDTO Save(LeaderDTO leaderDto)
         {
             var leader = ConvertToEntity(leaderDto);
             _context.Leaders.Add(leader);
             _context.SaveChanges();
+            LeaderDTO l = ConvertToDTO(leader);
+            return l;
         }
 
         public void Update(LeaderDTO leaderDto)

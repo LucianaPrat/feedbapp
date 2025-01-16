@@ -39,11 +39,13 @@ namespace Dominio.Accessors.Developers
             return ConvertToDTO(developer);
         }
 
-        public void Save(DeveloperDTO developerDTO)
+        public DeveloperDTO Save(DeveloperDTO developerDTO)
         {
             var developer = ConvertToEntity(developerDTO);
             _context.Developers.Add(developer);
             _context.SaveChanges();
+            DeveloperDTO d = ConvertToDTO(developer);
+            return d;
         }
 
         public void Update(DeveloperDTO developerDto)

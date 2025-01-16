@@ -2,20 +2,18 @@
 using Dominio;
 using Dominio.Accessors.Clients;
 using Dominio.Accessors.Leaders;
-using Dominio.Accessors.Clients;
 using Dominio.Accessors.Email;
 using Dominio.DTO;
-using Dominio.Entity;
 using Feedbapp.Services;
 using Dominio.Accessors.Developers;
 using Dominio.Accessors.Admins;
 using Dominio.Accessors.Positions;
+using Dominio.Accessors.Deliveries;
 
 namespace Business
 {
     public class Sistema : ISistema
     {
-        private static List<Deliveries> _deliveries { get; set; } = new List<Deliveries>();
         private IEmailService _emailService;
         private IEmailAccessor _emailAccesor;
         private IClientAccessor _clientAccesor;
@@ -23,14 +21,16 @@ namespace Business
         private ILeaderAccessor _leaderAccesor;
         private IDeveloperAccessor _developerAccesor;
         private IPositionAccessor _positionAccesor;
+        private IDeliveryAccessor _deliveryAccesor;
 
         public Sistema(IEmailService emailService,
             IEmailAccessor emailAccesor,
             IClientAccessor clientAccesor,
             IAdminAccessor adminAccesor,
-            ILeaderAccessor leaderAccesor,
+            ILeaderAccessor leaderAccesor,            
             IDeveloperAccessor developerAccesor,
-            IPositionAccessor positionAccessor)
+            IPositionAccessor positionAccessor,
+            IDeliveryAccessor deliveryAccessor)
         {
             _emailService = emailService;
             _emailAccesor = emailAccesor;
@@ -39,6 +39,7 @@ namespace Business
             _leaderAccesor = leaderAccesor;
             _developerAccesor = developerAccesor;
             _positionAccesor = positionAccessor;
+            _deliveryAccesor = deliveryAccessor;
         }
 
         #region Gets
@@ -111,9 +112,17 @@ namespace Business
             }
             return pos;
         }
-        public List<Deliveries> GetDeliveries()
+        public List<DeliveryDTO> GetDeliveries()
         {
-            return _deliveries;
+            List<DeliveryDTO> del = new List<DeliveryDTO>();
+            foreach (var d in _deliveryAccesor.GetAll())
+            {
+                if (d.Removed == false)
+                {
+                    del.Add(d);
+                }
+            }
+            return del;
         }
         #endregion
 
@@ -197,25 +206,16 @@ namespace Business
         {
             _leaderAccesor.Save(l);
         }
-        public void CreateDeliverie(Deliveries d)
+        public DeliveryDTO CreateDeliverie(DeliveryDTO d)
         {
-            _deliveries.Add(d);
+            _deliveryAccesor.Save(d);
+            return d;
         }
 
         #endregion
 
         #region Serch
-        public Deliveries? SearchDeliveries(int id)
-        {
-            foreach (var d in _deliveries)
-            {
-                if (d.Id == id)
-                {
-                    return d;
-                }
-            }
-            return null;
-        }
+        
         public LeaderDTO? SearchLeaderId(int id)
         {
             return _leaderAccesor.GetById(id);
@@ -228,11 +228,14 @@ namespace Business
         {
             return _clientAccesor.GetById(id);
         }
-        public PositionDTO? SerchPositionId(int id)
+        public PositionDTO? SearchPositionId(int id)
         {
             return _positionAccesor.GetById(id);
         }
-
+        public DeliveryDTO? SearchDeliveries(int id)
+        {
+            return _deliveryAccesor.GetById(id);
+        }
         #endregion
 
         #region Edits
@@ -253,6 +256,10 @@ namespace Business
         public void EditPosition(PositionDTO p)
         {
             _positionAccesor.Update(p);
+        }
+        public void DeliveriePosition(DeliveryDTO d)
+        {
+            _deliveryAccesor.Update(d);
         }
         #endregion
 
@@ -276,6 +283,10 @@ namespace Business
         {
             _positionAccesor.Delete(p);
         }
+        public void DeleteDeliverie(DeliveryDTO p)
+        {
+            _deliveryAccesor.Delete(p);
+        }
         #endregion
         public AdminDTO Login(String email, String password)
         {
@@ -295,11 +306,15 @@ namespace Business
         public void SendEmail(int positionId, EmailDTO e, EmailConfig emailConfig)
         {
             e.IsValid();
-            PositionDTO p = SerchPositionId(positionId);
-            CreateDeliverie(new Deliveries(p, e));
-            _emailService.SendEmail(e, emailConfig);
+            
+            EmailDTO em = _emailAccesor.Save(e);
+
+            PositionDTO p = SearchPositionId(positionId);
+            DeliveryDTO delivery = new DeliveryDTO(p,em);
+            DeliveryDTO d = CreateDeliverie(delivery);
+
+            _emailService.SendEmail(d.Email, emailConfig);
         }
 
-        
     }
 }
