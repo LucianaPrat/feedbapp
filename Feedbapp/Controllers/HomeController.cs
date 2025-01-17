@@ -59,6 +59,7 @@ namespace Feedbapp.Controllers
         public IActionResult CreateClient(ClientDTO c)
         {
             try {
+                c.IsValid();
                 _sistema.CreateClient(c);
                 ViewBag.Message = "Creado correctamente";
                 return RedirectToAction("Clients");
@@ -75,21 +76,24 @@ namespace Feedbapp.Controllers
         }
 
         [HttpPost]
-
         public IActionResult CreateDeveloper(DeveloperDTO d)
         {
             ViewBag.leaders = _sistema.GetLeaders();
+
             try
             {
+                d.IsValid();
                 _sistema.CreateDeveloper(d);
-                ViewBag.Message = "Creado correctamente";
+                ViewBag.Message = "Developer successfully created.";
                 return RedirectToAction("Developers");
             }
-            catch (Exception e){
+            catch (Exception e)
+            {
                 ViewBag.Message = e.Message;
-            }        
-            return View();
+                return View(d);
+            }
         }
+
         public IActionResult CreatePosition()
         {
             ViewBag.developers = _sistema.GetDevelopers();

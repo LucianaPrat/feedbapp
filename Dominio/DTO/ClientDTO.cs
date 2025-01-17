@@ -44,17 +44,19 @@ namespace Dominio.DTO
         }
         public virtual void IsValid()
         {
-            if (string.IsNullOrEmpty(Name))
+            if (string.IsNullOrWhiteSpace(Name))
             {
-                throw new Exception("El nombre puede estar vacio.");
+                throw new ArgumentException("The name cannot be empty or contain only spaces.");
             }
+
             if (Name.Length > 30)
             {
-                throw new Exception("El nombre tiene que tener menos de 40 caracteres.");
+                throw new ArgumentException("The name must be less than 30 characters.");
             }
+
             if (Name.Length < 5)
             {
-                throw new Exception("El nombre tiene que tener mas de 3 caracteres.");
+                throw new ArgumentException("The name must be more than 3 characters.");
             }
         }
         #endregion

@@ -19,7 +19,6 @@ namespace Dominio.DTO
         public DeliveryDTO()
         {
         }
-
         public DeliveryDTO(PositionDTO position, EmailDTO email)
         {
             Date = DateTime.Now;
@@ -29,5 +28,6 @@ namespace Dominio.DTO
             EmailId = email.Id;
             Removed = false;
         }
+
     }
 }

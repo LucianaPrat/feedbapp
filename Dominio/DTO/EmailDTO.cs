@@ -24,19 +24,19 @@ namespace Dominio.DTO
         {
             if (string.IsNullOrEmpty(Topic))
             {
-                throw new Exception("El asunto no debe estar vacío.");
+                throw new Exception("The subject cannot be empty.");
             }
             if (string.IsNullOrEmpty(Body))
             {
-                throw new Exception("El body no puede estar vacío.");
+                throw new Exception("The body cannot be empty.");
             }
             if (Topic.Length > 30)
             {
-                throw new Exception("El asunto debe tener menos de 20 caracteres.");
+                throw new Exception("The subject must be less than 30 characters.");
             }
             if (Topic.Length < 3)
             {
-                throw new Exception("El asunto debe tener mas de 3 caracteres.");
+                throw new Exception("The subject must be more than 3 characters.");
             }
         }
     }

@@ -32,18 +32,32 @@ namespace Dominio.DTO
         }
         public virtual void IsValid()
         {
-            //if (string.IsNullOrEmpty(Name))
-            //{
-            //    throw new Exception("El nombre puede estar vacio.");
-            //}
-            //if (Name.Length > 40)
-            //{
-            //    throw new Exception("El nombre tiene que tener menos de 40 caracteres.");
-            //}
-            //if (Name.Length < 5)
-            //{
-            //    throw new Exception("El nombre tiene que tener mas de 3 caracteres.");
-            //}
+            
+            // Description validation (optional, if applicable)
+            if (!string.IsNullOrEmpty(Description) && Description.Length > 200)
+            {
+                throw new ArgumentException("The description cannot exceed 200 characters.");
+            }
+
+            if (DeveloperId <= 0)
+            {
+                throw new ArgumentException("The description cannot exceed 200 characters.");
+            }
+            // Relationships validation (optional, if applicable)
+            if (Developer == null)
+            {
+                throw new ArgumentException("The associated developer cannot be null.");
+            }
+
+            if (Client == null)
+            {
+                throw new ArgumentException("The associated client cannot be null.");
+            }
+
+            if (Leader == null)
+            {
+                throw new ArgumentException("The associated leader cannot be null.");
+            }
         }
         #endregion
     }
