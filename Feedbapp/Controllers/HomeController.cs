@@ -1,5 +1,6 @@
 using Business;
 using Business.Models;
+using Domain.DTO;
 using Dominio;
 using Dominio.DTO;
 using Dominio.Entity;
@@ -39,10 +40,47 @@ namespace Feedbapp.Controllers
         {
             return View(_sistema.GetPositions());
         }
-        public IActionResult Deliveries()
+        public IActionResult Deliveries(DeliveryViewModel dvm)
         {
-            return View(_sistema.GetDeliveries());
+            // Obtén las opciones para los dropdowns
+            var developers = _sistema.GetDevelopers(); // Asume que devuelve una lista de DeveloperDTO
+            var leaders = _sistema.GetLeaders(); // Asume que devuelve una lista de LeaderDTO
+
+            // Aplica los filtros según los parámetros proporcionados
+            var deliveries = _sistema.GetDeliveries();
+
+            if (dvm.SelectedDeveloperId.HasValue)
+            {
+                deliveries = deliveries.Where(d => d.Position.Developer.Id == dvm.SelectedDeveloperId.Value).ToList();
+            }
+            if (dvm.SelectedLeaderId.HasValue)
+            {
+                deliveries = deliveries.Where(d => d.Position.Developer.Leader.Id == dvm.SelectedLeaderId.Value).ToList();
+            }
+            if (dvm.StartDate.HasValue)
+            {
+                deliveries = deliveries.Where(d => d.Date >= dvm.StartDate.Value).ToList();
+            }
+            if (dvm.EndDate.HasValue)
+            {
+                deliveries = deliveries.Where(d => d.Date <= dvm.EndDate.Value).ToList();
+            }
+
+            // Crea el modelo de vista
+            var viewModel = new DeliveryViewModel
+            {
+                DeveloperOptions = developers,
+                LeaderOptions = leaders,
+                Deliveries = deliveries,
+                SelectedDeveloperId = dvm.SelectedDeveloperId,
+                SelectedLeaderId = dvm.SelectedLeaderId,
+                StartDate = dvm.StartDate,
+                EndDate = dvm.StartDate
+            };
+
+            return View(viewModel);
         }
+
         public IActionResult Leaders()
         {
             return View(_sistema.GetLeaders());

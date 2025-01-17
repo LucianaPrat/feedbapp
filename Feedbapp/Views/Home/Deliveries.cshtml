@@ -1,66 +1,105 @@
-﻿@model IEnumerable<Dominio.DTO.DeliveryDTO>
+﻿@model Domain.DTO.DeliveryViewModel
 
 <div class="text-center" style="padding-top: 15px; padding-bottom: 10px;">
     <h1 style="color: #333A73; font-weight: bold; font-size: 2.5rem; margin-bottom: 20px;">Envíos</h1>
 </div>
 
-@if (Model.Count() == 0)
-{
-    <p>No deliveries exist</p>
-}
-else
-{
-    <div class="table-responsive" style="padding-top: 20px; padding-bottom: 20px;">
-        <table class="table-custom">
-            <thead>
-                <tr>
-                    <th>Developer</th>
-                    <th>Leader</th>
-                    <th>Date</th>
-                    <th></th>
-                </tr>
-            </thead>
-            @foreach (Dominio.DTO.DeliveryDTO d in Model)
-            {
-                <tbody>
+<div class="filters" style="margin-bottom: 20px;">
+    <form method="get">
+        <div class="row">
+            <div class="col-md-4">
+                <label for="exampleSelect">Developers</label>
+                <select asp-for="SelectedDeveloperId" class="form-control" id="exampleSelect">
+                    <option value="">Select a developer</option>
+                    @foreach (var developer in Model.DeveloperOptions)
+                    {
+                        <option value="@developer.Id">@developer.Name @developer.LastName</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label for="exampleSelect">Leaders</label>
+                <select asp-for="SelectedLeaderId" class="form-control" id="exampleSelect">
+                    <option value="">Select a leader</option>
+                    @foreach (var leader in Model.LeaderOptions)
+                    {
+                        <option value="@leader.Id">@leader.Name @leader.LastName</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label for="dateRange" class="form-label">Date Range</label>
+                <input asp-for="StartDate" type="date" class="form-control" />
+                <input asp-for="EndDate" type="date" class="form-control" style="margin-top: 5px;" />
+            </div>
+        </div>
+        <div class="text-center" style="margin-top: 15px;">
+            <button type="submit" class="btn btn-primary">Filter</button>
+            <a href="@Url.Action("Index")" class="btn btn-secondary">Clear Filters</a>
+        </div>
+    </form>
+</div>
+
+
+    @if (!Model.Deliveries.Any())
+    {
+        <p>No deliveries exist</p>
+    }
+    else
+    {
+        <div class="table-responsive" style="padding-top: 20px; padding-bottom: 20px;">
+            <table class="table-custom">
+                <thead>
                     <tr>
-                        <td>@d.Position.Developer.Name @d.Position.Developer.LastName </td>
-                        <td>@d.Position.Developer.Leader.Name @d.Position.Developer.Leader.LastName </td>
-                        <td>@d.Date</td>
-                        <td class="modal-footer">
-                            <a class="btn-custom btn-secondary"
-                               data-bs-toggle="modal"
-                               data-bs-target="#emailModal"
-                               data-leader-email="@d.Position.Developer.Leader.Email"
-                               data-email-topic="@d.Email.Topic"
-                               data-email-body="@d.Email.Body">
-                                Show Email
-                            </a>
-                        </td>
+                        <th>Developer</th>
+                        <th>Leader</th>
+                        <th>Date</th>
+                        <th></th>
                     </tr>
-                </tbody>
-            }
-        </table>
-        <!-- Modal -->
-        <div class="modal fade" id="emailModal" tabindex="-1" aria-labelledby="emailModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="emailModalLabel">Email</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p><strong>Address Leader:</strong> <span id="address"></span></p>
-                        <p><strong>Topic:</strong> <span id="topic"></span></p>
-                        <p><strong>Body:</strong> <span id="body"></span></p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </thead>
+                @foreach (var delivery in Model.Deliveries)
+                {
+                    <tbody>
+                        <tr>
+                            <td>@delivery.Position.Developer.Name @delivery.Position.Developer.LastName</td>
+                            <td>@delivery.Position.Developer.Leader.Name @delivery.Position.Developer.Leader.LastName</td>
+                            <td>@delivery.Date.ToShortDateString()</td>
+                            <td class="modal-footer">
+                                <a class="btn-custom btn-secondary"
+                                   data-bs-toggle="modal"
+                                   data-bs-target="#emailModal"
+                                   data-leader-email="@delivery.Position.Developer.Leader.Email"
+                                   data-email-topic="@delivery.Email.Topic"
+                                   data-email-body="@delivery.Email.Body">
+                                    Show Email
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                }
+            </table>
+            <!-- Modal -->
+            <div class="modal fade" id="emailModal" tabindex="-1" aria-labelledby="emailModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="emailModalLabel">Email</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p><strong>Address Leader:</strong> <span id="address"></span></p>
+                            <p><strong>Topic:</strong> <span id="topic"></span></p>
+                            <p><strong>Body:</strong> <span id="body"></span></p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+
+    }
 
     <script>
         function setEmailInfo(address, topic, body) {
@@ -84,4 +123,4 @@ else
     </script>
 
 
-}
+
