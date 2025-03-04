@@ -75,11 +75,11 @@ namespace Dominio.DTO
             {
                 throw new Exception("The Email field is required.");
             }
-            var emailRegex = new Regex(@"^[^@\s]+@[^@\s]+\.[^@\s]+$");
-            if (emailRegex.IsMatch(Email))
-            {
-                throw new Exception("The email does not comply with the format.");
-            }
+            //var emailRegex = new Regex(@"^[^@\s]+@[^@\s]+\.[^@\s]+$");
+            //if (emailRegex.IsMatch(Email))
+            //{
+            //    throw new Exception("The email does not comply with the format.");
+            //}
         }
 
     }

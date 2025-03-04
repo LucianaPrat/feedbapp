@@ -23,10 +23,10 @@ namespace Dominio.DTO
             {
                 throw new Exception("The LeaderId must be greater than 0.");
             }
-            if (Leader == null)
-            {
-                throw new Exception("A Leader is required for the Developer.");
-            }
+            //if (Leader == null)
+            //{
+            //    throw new Exception("A Leader is required for the Developer.");
+            //}
         }
 
     }

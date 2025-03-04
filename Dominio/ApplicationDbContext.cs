@@ -25,7 +25,7 @@ namespace Dominio
             // Email
             modelBuilder.Entity<Email>().Property(e => e.Address).HasMaxLength(50);
             modelBuilder.Entity<Email>().Property(e => e.Topic).HasMaxLength(50);
-            modelBuilder.Entity<Email>().Property(e => e.Body).HasMaxLength(500);
+            modelBuilder.Entity<Email>().Property(e => e.Body).HasColumnType("nvarchar(max)");
 
             // Admin
             modelBuilder.Entity<Entity.Admin>().Property(c => c.Name).HasMaxLength(50);

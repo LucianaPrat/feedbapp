@@ -1,35 +1,39 @@
 ﻿@model Dominio.DTO.EmailDTO
 
-<h1>Send Email</h1>
+<div class="container d-flex flex-column align-items-center text-center" style="padding-top: 15px; padding-bottom: 10px;">
+    <h1 style="color: #333A73; font-weight: bold; font-size: 2.5rem; margin-bottom: 20px;">Send Email</h1>
+</div>
 <hr />
-<div class="row">
-    <div class="col-md-4">
+<div class="container d-flex justify-content-center">
+    <div class="col-md-6">
         <!-- Formulario para enviar el correo -->
         <form asp-action="SendEmail" method="post">
             <!-- Campo oculto para PositionId -->
             <input id="PositionId" name="PositionId" type="hidden" value="@ViewBag.position.Id">
 
             <!-- Dirección de correo del líder (oculta) -->
-            <div class="form-group">
+            <div class="form-group text-center">
                 <label class="control-label">Leader Email:</label>
-                <label class="control-label">@ViewBag.position.Developer.Leader.Email</label>
+                <label class="control-label d-block">@ViewBag.position.Developer.Leader.Email</label>
                 <input type="hidden" id="Address" name="Address" value="@ViewBag.position.Developer.Leader.Email">
             </div>
 
             <!-- Campo para el asunto -->
             <div class="form-group">
-                <label for="Topic" class="control-label">Subject:</label>
-                <input id="Topic" name="Topic" class="form-control" />
+                <label for="Topic" class="control-label">Subject: </label>
+                <input id="Topic" name="Topic" class="form-control text-center" value="@ViewBag.subject">
             </div>
 
             <!-- Campo para el cuerpo del mensaje -->
             <div class="form-group">
                 <label for="Body" class="control-label">Body:</label>
-                <textarea id="Body" name="Body" class="form-control" rows="5"></textarea>
+                <textarea id="Body" name="Body" class="form-control text-center" rows="5">@ViewBag.text</textarea>
             </div>
 
-            <!-- Botón de envío -->
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <!-- Botón de envío centrado -->
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
         </form>
     </div>
 </div>

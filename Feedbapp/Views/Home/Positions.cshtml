@@ -29,7 +29,7 @@ else
                         <td>@p.Developer.Name @p.Developer.LastName </td>
                         <td>@p.Description</td>
                         <td>@p.Developer.Leader.Client.Name</td>
-                        <td>@p.Developer.Leader.Name</td>
+                        <td>@p.Developer.Leader.Name @p.Developer.Leader.LastName</td>
                         <td>@p.Recurrence</td>
                         <td>
                             <a href="@Url.Action("EditPosition", "Home", new { id = p.Id })" class="btn-custom btn-primary">Edit</a>

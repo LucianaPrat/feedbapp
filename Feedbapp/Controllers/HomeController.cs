@@ -1,4 +1,4 @@
-using Business;
+锘縰sing Business;
 using Business.Models;
 using Domain.DTO;
 using Dominio;
@@ -7,6 +7,7 @@ using Dominio.Entity;
 using Feedbapp.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualBasic;
 using System.Diagnostics;
 
 namespace Feedbapp.Controllers
@@ -42,11 +43,11 @@ namespace Feedbapp.Controllers
         }
         public IActionResult Deliveries(DeliveryViewModel dvm)
         {
-            // Obt閚 las opciones para los dropdowns
+            // Obt茅n las opciones para los dropdowns
             var developers = _sistema.GetDevelopers(); // Asume que devuelve una lista de DeveloperDTO
             var leaders = _sistema.GetLeaders(); // Asume que devuelve una lista de LeaderDTO
 
-            // Aplica los filtros seg鷑 los par醡etros proporcionados
+            // Aplica los filtros seg煤n los par谩metros proporcionados
             var deliveries = _sistema.GetDeliveries();
 
             if (dvm.SelectedDeveloperId.HasValue)
@@ -120,8 +121,10 @@ namespace Feedbapp.Controllers
 
             try
             {
+                
                 d.IsValid();
                 _sistema.CreateDeveloper(d);
+                
                 ViewBag.Message = "Developer successfully created.";
                 return RedirectToAction("Developers");
             }
@@ -332,8 +335,25 @@ namespace Feedbapp.Controllers
 
         public IActionResult SendEmail(int id)
         {
-           PositionDTO serch = _sistema.SearchPositionId(id);
-           ViewBag.position = serch;
+           PositionDTO search = _sistema.SearchPositionId(id);
+           ViewBag.position = search;
+            if (search != null) {
+
+                //TO DO 
+                String text = "Hola " + search.Leader.Name + ",<br><br>" +
+                        "Esperamos que te encuentres bien. <br><br>" +
+                        "En nuestro compromiso por mejorar, nos gustar铆a saber tu opini贸n sobre la colaboraci贸n con <strong>" +
+                        search.Developer.Name + " "+ search.Developer.LastName + "</strong> como <strong>" + search.Description  + "<strong>. <br><br>" +
+                        "Te invitamos a compartir tu feedback completando nuestra breve encuesta en el siguiente enlace: <br><br>" +
+                        "\r\n\r\n馃憠 Enlace al Formulario de Feedback <br><br> " +
+                        "Tu feedback nos ayuda a mejorar. 隆Gracias por tu tiempo! <br><br>" +
+                        "Si necesitas algo, estamos a disposici贸n.<br><br>" +
+                        "Saludos<br><br>" +
+                        "<strong>Equipo People Care</strong>";
+                ViewBag.text = text;
+                ViewBag.subject = search.Developer.Name + search.Developer.LastName + " - Invitaci贸n a completar encuesta";
+            }
+            
            return View();
         }
 

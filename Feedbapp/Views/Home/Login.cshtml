@@ -1,9 +1,22 @@
-﻿<h1>Login</h1>
-<form method="post">
-    <label>Email:</label>
-    <input type="text" name="Email" /> <br /><br />
-    <label>Password:</label>
-    <input type="password" name="Password" /><br /><br />
-    <input type="submit" value="Login" />
-</form>
-<p>@ViewBag.mensaje</p>
+﻿<div class="d-flex justify-content-center align-items-center min-vh-100">
+    <div class="card shadow-lg p-4 rounded" style="width: 350px;">
+        <h2 class="text-center mb-4">Login</h2>
+        <form method="post">
+            <div class="mb-3">
+                <label class="form-label">Email:</label>
+                <input type="text" name="Email" class="form-control" required />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Password:</label>
+                <input type="password" name="Password" class="form-control" required />
+            </div>
+
+            <div class="d-grid">
+                <button type="submit" class="btn btn-primary">Login</button>
+            </div>
+        </form>
+
+        <p class="text-danger text-center mt-3">@ViewBag.mensaje</p>
+    </div>
+</div>
